@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace ITB\ApiPlatformUpdateActionsBundle\Request;
 
+use ITB\ApiPlatformUpdateActionsBundle\Validation\UpdateRequest;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+
 final class Request
 {
     /**
@@ -16,5 +19,14 @@ final class Request
      */
     public function __construct(public string $action, public array $payload, public ?string $resource = null)
     {
+    }
+
+    /**
+     * @param ClassMetadata $metadata
+     * @return void
+     */
+    public static function loadValidatorMetadata(ClassMetadata $metadata): void
+    {
+        $metadata->addConstraint(new UpdateRequest());
     }
 }
