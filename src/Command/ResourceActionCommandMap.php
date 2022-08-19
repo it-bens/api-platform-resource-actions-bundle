@@ -13,7 +13,7 @@ use ITB\ApiPlatformUpdateActionsBundle\Exception\CompileTimeExceptionInterface;
 final class ResourceActionCommandMap
 {
     /** @var array<string, ResourceActionCommandAssociation> */
-    private array $entries = [];
+    private array $associations = [];
 
     /**
      * @param array<int, array{'resource': string, 'action': string, 'commandClass': class-string}> $associations
@@ -33,8 +33,34 @@ final class ResourceActionCommandMap
             } catch (ResourceClassNotFoundException $exception) {
                 throw ResourceNotRegisteredException::create($association->getResource(), $exception);
             }
-            $this->entries[$association->getResource() . $association->getAction()] = $association;
+            $this->associations[$association->getResource() . $association->getAction()] = $association;
         }
+    }
+
+    /**
+     * @param string $resource
+     * @return array
+     */
+    public function getActionsForResource(string $resource): array
+    {
+        $actions = [];
+        foreach ($this->associations as $association) {
+            if ($resource !== $association->getResource()) {
+                continue;
+            }
+
+            $actions[] = $association->getAction();
+        }
+
+        return array_unique($actions);
+    }
+
+    /**
+     * @return array
+     */
+    public function getAssociations(): array
+    {
+        return array_values($this->associations);
     }
 
     /**
@@ -43,12 +69,24 @@ final class ResourceActionCommandMap
      * @return string
      * @throws CommandForResourceActionNotFound
      */
-    public function getCommandClass(string $resourceClass, string $actionName): string
+    public function getCommandClassForResourceAction(string $resourceClass, string $actionName): string
     {
-        if (!array_key_exists($resourceClass . $actionName, $this->entries)) {
+        if (!array_key_exists($resourceClass . $actionName, $this->associations)) {
             throw CommandForResourceActionNotFound::create($resourceClass, $actionName);
         }
 
-        return $this->entries[$resourceClass . $actionName]->getCommandClass();
+        return $this->associations[$resourceClass . $actionName]->getCommandClass();
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getResources(): array
+    {
+        return array_unique(
+            array_map(static function (ResourceActionCommandAssociation $association): string {
+                return $association->getResource();
+            }, $this->associations)
+        );
     }
 }

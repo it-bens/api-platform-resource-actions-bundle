@@ -59,7 +59,7 @@ final class RequestTransformer implements DataTransformerInterface
             throw ResourceClassNotAStringException::create();
         }
         $object->resource = $context['resource_class'];
-        $commandClass = $this->resourceActionCommandMap->getCommandClass($object->resource, $object->action);
+        $commandClass = $this->resourceActionCommandMap->getCommandClassForResourceAction($object->resource, $object->action);
 
         if (!array_key_exists(AbstractNormalizer::OBJECT_TO_POPULATE, $context)) {
             throw ObjectToPopulateMissingException::create();

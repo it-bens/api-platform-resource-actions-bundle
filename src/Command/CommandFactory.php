@@ -37,7 +37,7 @@ final class CommandFactory
             throw RequestResourceIsNullException::create($request);
         }
 
-        $commandClass = $this->resourceActionCommandMap->getCommandClass($request->resource, $request->action);
+        $commandClass = $this->resourceActionCommandMap->getCommandClassForResourceAction($request->resource, $request->action);
 
         return $this->denormalizer->denormalize($request->payload, $commandClass);
     }
