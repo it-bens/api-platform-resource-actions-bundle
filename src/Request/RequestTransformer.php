@@ -44,7 +44,7 @@ final class RequestTransformer implements DataTransformerInterface
      * There is no actual transformation in this method,
      * but it's the best way to add data to the payload and set the resource class of the operation.
      *
-     * @param $object
+     * @param Request $object
      * @param string $to
      * @param array $context
      * @return object
@@ -69,8 +69,11 @@ final class RequestTransformer implements DataTransformerInterface
         }
         try {
             $reflectionConstructor = new ReflectionConstructor($commandClass);
+
+            $parametersInPayload = array_keys($object->payload);
             $constructorParameterName = $reflectionConstructor->extractParameterNameForObject(
-                $context[AbstractNormalizer::OBJECT_TO_POPULATE]
+                $context[AbstractNormalizer::OBJECT_TO_POPULATE],
+                $parametersInPayload
             );
         } catch (ReflectionException $exception) {
             throw ConstructionArgumentNameExtractionFailed::create(
