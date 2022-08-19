@@ -37,6 +37,7 @@ final class ITBApiPlatformUpdateActionsExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $resourceActionCommandAssociations = [];
+        $resourceActionDescriptionAssociations = [];
         foreach ($config['resources'] as $resource => $actions) {
             foreach ($actions as $action => $actionData) {
                 $resourceActionCommandAssociations[] = [
@@ -44,12 +45,17 @@ final class ITBApiPlatformUpdateActionsExtension extends Extension
                     'action' => $action,
                     'commandClass' => $actionData['command_class']
                 ];
+                $resourceActionDescriptionAssociations[$resource][$action] = $actionData['description'];
             }
         }
         $resourceActionCommandMap = $container->getDefinition(
             'itb_api_platform_update_actions.resource_action_command_map'
         );
         $resourceActionCommandMap->replaceArgument(0, $resourceActionCommandAssociations);
+        $resourceActionDescriptionMap = $container->getDefinition(
+            'itb_api_platform_update_actions.resource_action_description_map'
+        );
+        $resourceActionDescriptionMap->replaceArgument(1, $resourceActionDescriptionAssociations);
 
         $controller = $container->getDefinition('itb_api_platform_update_actions.controller');
         $controller->replaceArgument(3, $config['validate_command']);

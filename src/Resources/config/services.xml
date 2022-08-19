@@ -30,5 +30,18 @@
             <argument type="service" id="itb_api_platform_update_actions.command_factory"/>
         </service>
         <service alias="itb_api_platform_update_actions.update_request_validator" id="ITB\ApiPlatformUpdateActionsBundle\Validation\UpdateRequestValidator"/>
+
+        <service id="itb_api_platform_update_actions.resource_action_description_map" class="ITB\ApiPlatformUpdateActionsBundle\Docs\ResourceActionDescriptionMap">
+            <argument type="service" id="itb_api_platform_update_actions.resource_action_command_map"/>
+            <argument/> <!-- filled in via configuration -->
+        </service>
+        <service id="itb_api_platform_update_actions.open_api_factory" decorates="api_platform.openapi.factory" class="ITB\ApiPlatformUpdateActionsBundle\Docs\OpenApiFactory">
+            <argument type="service" id=".inner"/>
+            <argument type="service" id="itb_api_platform_update_actions.resource_action_command_map"/>
+            <argument type="service" id="itb_api_platform_update_actions.resource_action_description_map"/>
+            <argument type="service" id="api_platform.metadata.resource.metadata_factory"/>
+            <argument type="service" id="api_platform.operation_path_resolver"/>
+        </service>
+        <service alias="itb_api_platform_update_actions.open_api_factory" id="ApiPlatform\Core\OpenApi\Factory\OpenApiFactoryInterface"/>
     </services>
 </container>
