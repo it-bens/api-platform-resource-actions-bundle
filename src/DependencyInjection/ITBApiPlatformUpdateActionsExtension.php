@@ -38,11 +38,11 @@ final class ITBApiPlatformUpdateActionsExtension extends Extension
 
         $resourceActionCommandAssociations = [];
         foreach ($config['resources'] as $resource => $actions) {
-            foreach ($actions as $action => $commandClass) {
+            foreach ($actions as $action => $actionData) {
                 $resourceActionCommandAssociations[] = [
                     'resource' => $resource,
                     'action' => $action,
-                    'commandClass' => $commandClass
+                    'commandClass' => $actionData['command_class']
                 ];
             }
         }
