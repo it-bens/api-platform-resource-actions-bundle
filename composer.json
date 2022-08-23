@@ -1,6 +1,6 @@
 {
   "name": "it-bens/api-platform-update-actions-bundle",
-  "description": "",
+  "description": "Bundle that can add actions to API Platform operations to deserialize payloads into command objects and dispatch them via message bus.",
   "type": "symfony-bundle",
   "license": "MIT",
   "authors": [
