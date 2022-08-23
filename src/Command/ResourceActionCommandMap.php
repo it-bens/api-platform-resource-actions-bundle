@@ -39,7 +39,7 @@ final class ResourceActionCommandMap
 
     /**
      * @param string $resource
-     * @return array
+     * @return string[]
      */
     public function getActionsForResource(string $resource): array
     {
@@ -56,7 +56,7 @@ final class ResourceActionCommandMap
     }
 
     /**
-     * @return array
+     * @return ResourceActionCommandAssociation[]
      */
     public function getAssociations(): array
     {

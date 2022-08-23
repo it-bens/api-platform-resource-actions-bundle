@@ -32,10 +32,10 @@ final class ResourceActionDescriptionMap
     /**
      * @param string $resourceClass
      * @param string $actionName
-     * @return string
+     * @return string|null
      * @throws CompileTimeExceptionInterface
      */
-    public function getDescriptionForResourceAction(string $resourceClass, string $actionName): string
+    public function getDescriptionForResourceAction(string $resourceClass, string $actionName): ?string
     {
         if (!array_key_exists($resourceClass . $actionName, $this->associations)) {
             throw DescriptionForResourceActionNotFound::create($resourceClass, $actionName);

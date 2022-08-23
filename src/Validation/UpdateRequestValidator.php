@@ -43,9 +43,13 @@ final class UpdateRequestValidator extends ConstraintValidator
         try {
             $this->commandFactory->createCommand($value);
         } catch (CommandForResourceActionNotFound $exception) {
+            // The resource is checked for null value in the createCommand method.
+            /** @var string $resource */
+            $resource = $value->resource;
+            
             $this->context->buildViolation($constraint->actionUnknownMessage)
                 ->setParameter('{{ action }}', $value->action)
-                ->setParameter('{{ resource }}', $value->resource)
+                ->setParameter('{{ resource }}', $resource)
                 ->atPath('action')
                 ->addViolation();
         } catch (ExceptionInterface $exception) {

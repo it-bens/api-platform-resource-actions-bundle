@@ -13,6 +13,8 @@ use ApiPlatform\Core\PathResolver\OperationPathResolverInterface;
 use Console_Table;
 use ITB\ApiPlatformUpdateActionsBundle\Command\ResourceActionCommandMap;
 use ITB\ApiPlatformUpdateActionsBundle\Controller\Controller;
+use ITB\ApiPlatformUpdateActionsBundle\Docs\OpenApiFactoryException\CommandClassConstructorNull;
+use ITB\ApiPlatformUpdateActionsBundle\Docs\OpenApiFactoryException\CommandClassNotAClassException;
 use ITB\ApiPlatformUpdateActionsBundle\Docs\OpenApiFactoryException\ResourceActionDocumentationFailedException;
 use ITB\ApiPlatformUpdateActionsBundle\Docs\OpenApiFactoryException\ResourceMetadataRetrievalFailedException;
 use ITB\ApiPlatformUpdateActionsBundle\Exception\CompileTimeExceptionInterface;
@@ -40,7 +42,7 @@ final class OpenApiFactory implements OpenApiFactoryInterface
     }
 
     /**
-     * @param array $context
+     * @param array<string, mixed> $context
      * @return OpenApi
      * @throws CompileTimeExceptionInterface
      */
@@ -53,6 +55,10 @@ final class OpenApiFactory implements OpenApiFactoryInterface
                 $metadata = $this->resourceMetadataFactory->create($resource);
             } catch (ResourceClassNotFoundException $exception) {
                 throw ResourceMetadataRetrievalFailedException::create($resource, $exception);
+            }
+
+            if (null === $metadata->getItemOperations()) {
+                continue;
             }
 
             foreach ($metadata->getItemOperations() as $operationName => $operationData) {
@@ -68,7 +74,9 @@ final class OpenApiFactory implements OpenApiFactoryInterface
                     continue;
                 }
 
+                /** @phpstan-ignore-next-line  */
                 $path = $this->operationPathResolver->resolveOperationPath(
+                    /** @phpstan-ignore-next-line  */
                     $metadata->getShortName(),
                     $operationData,
                     OperationType::ITEM,
@@ -77,6 +85,7 @@ final class OpenApiFactory implements OpenApiFactoryInterface
                 $apiPath = str_replace('.{_format}', '', $path);
 
                 $pathItem = $openApi->getPaths()->getPath($apiPath);
+                /** @phpstan-ignore-next-line  */
                 $patchOperation = $pathItem->getPatch();
 
                 $description = '---' . PHP_EOL . PHP_EOL;
@@ -85,8 +94,11 @@ final class OpenApiFactory implements OpenApiFactoryInterface
 
                 $openApi->getPaths()->addPath(
                     $apiPath,
+                    /** @phpstan-ignore-next-line  */
                     $pathItem->withPatch(
+                    /** @phpstan-ignore-next-line  */
                         $patchOperation->withDescription(
+                        /** @phpstan-ignore-next-line  */
                             $patchOperation->getDescription() . PHP_EOL . PHP_EOL . $description
                         )
                     )
@@ -113,7 +125,7 @@ final class OpenApiFactory implements OpenApiFactoryInterface
                 $commandClass = $this->resourceActionCommandMap->getCommandClassForResourceAction($resource, $action);
                 // The properties of the command class with their name and type accumulated in one string.
                 $properties = $this->getPayloadProperties($commandClass, $resource);
-                $description = $this->resourceActionDescriptionMap->getDescriptionForResourceAction($resource, $action);
+                $description = $this->resourceActionDescriptionMap->getDescriptionForResourceAction($resource, $action) ?? '';
             } catch (Throwable $exception) {
                 throw ResourceActionDocumentationFailedException::create($resource, $action, $exception);
             }
@@ -126,9 +138,9 @@ final class OpenApiFactory implements OpenApiFactoryInterface
         // Replace characters
         $openApiCompatibleTable = str_replace('+', '|', $renderedTable);
         // Remove first line
-        $openApiCompatibleTable = substr($openApiCompatibleTable, $lineLength);
+        $openApiCompatibleTable = substr($openApiCompatibleTable, (int)$lineLength);
         // Remove last line
-        $openApiCompatibleTable = substr($openApiCompatibleTable, 0, -$lineLength);
+        $openApiCompatibleTable = substr($openApiCompatibleTable, 0, -(int)$lineLength);
 
         return $openApiCompatibleTable;
     }
@@ -138,11 +150,22 @@ final class OpenApiFactory implements OpenApiFactoryInterface
      * @param string $resource
      * @return string
      * @throws ReflectionException
+     * @throws CompileTimeExceptionInterface
      */
     private function getPayloadProperties(string $commandClass, string $resource): string
     {
+        if (!class_exists($commandClass, true)) {
+            throw CommandClassNotAClassException::create($commandClass);
+        }
+
         $commandReflection = new ReflectionClass($commandClass);
         $commandConstructor = $commandReflection->getConstructor();
+        
+        if (null === $commandConstructor) {
+            // Currently, the automated documentation only supports command classes with a constructor.
+            // A documentation based on public class properties is possible, but currently not implemented.
+            throw CommandClassConstructorNull::create($commandClass);
+        }
 
         $properties = '';
         foreach ($commandConstructor->getParameters() as $parameter) {
@@ -151,7 +174,7 @@ final class OpenApiFactory implements OpenApiFactoryInterface
             }
 
             $type = (string)$parameter->getType();
-            if ($parameter->getType()->allowsNull()) {
+            if (null !== $parameter->getType() && $parameter->getType()->allowsNull()) {
                 $type .= '|null';
             }
 

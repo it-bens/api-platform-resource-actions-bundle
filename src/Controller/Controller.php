@@ -21,17 +21,18 @@ final class Controller
     /**
      * @param CommandFactory $commandFactory
      * @param ApiPlatformValidatorInterface $validator
-     * @param MessageBusInterface $messageBus
+     * @param MessageBusInterface $defaultBus
      * @param bool $validateCommand
      * @param bool $ignoreMessengerValidation
      */
     public function __construct(
         private CommandFactory $commandFactory,
         private ApiPlatformValidatorInterface $validator,
-        private MessageBusInterface $messageBus,
+        private MessageBusInterface $defaultBus,
         private bool $validateCommand,
         private bool $ignoreMessengerValidation
     ) {
+        $this->messageBus = $this->defaultBus;
     }
 
     /**

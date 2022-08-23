@@ -14,7 +14,7 @@ final class ResourceActionDocumentationFailedException extends Exception impleme
     /**
      * @param string $resource
      * @param string $action
-     * @param ResourceClassNotFoundException $exception
+     * @param Throwable $exception
      * @return ResourceActionDocumentationFailedException
      */
     public static function create(

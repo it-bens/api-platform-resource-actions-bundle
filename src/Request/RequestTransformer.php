@@ -46,7 +46,7 @@ final class RequestTransformer implements DataTransformerInterface
      *
      * @param Request $object
      * @param string $to
-     * @param array $context
+     * @param array<string, mixed> $context
      * @return object
      * @throws RuntimeExceptionInterface
      */

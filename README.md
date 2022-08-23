@@ -123,6 +123,12 @@ The `UpdateRequestValidator` tries to denormalize the payload to the command obj
 If that validation passes, the denormalization is done again in the controller. 
 To minimize the performance impact of this double denormalization, a serializer cache should be used.
 
+### Commands without constructor
+A key mechanic of this bundle is to inject the resource object of the operation into the payload.
+Currently, the `RequestTransformer` requires a target class with a constructor and a parameter of that class to infer the parameter name.
+If a command class or DTO contains no constructor or if the constructor is private denormalization might not work.
+Furthermore, the OpenAPI extension could also fail, because it relies on constructors as well.
+
 ## Related Packages/Bundles
 Because the `Controller` will use the default bus to dispatch the command as a message, the usage of the
 Message Bus Redirect Bundle (https://github.com/it-bens/message-bus-redirect-bundle) comes in handy.
