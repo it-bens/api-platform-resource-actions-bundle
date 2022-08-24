@@ -58,9 +58,9 @@ final class RequestTransformer implements DataTransformerInterface
         if (null === $constructorParameterName) {
             return $object;
         }
-        
+
         $object->payload[$constructorParameterName] = $apiPlatformContext->getResourceObject();
-        
+
         return $object;
     }
 }
