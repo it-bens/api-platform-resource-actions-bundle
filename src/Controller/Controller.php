@@ -7,8 +7,10 @@ namespace ITB\ApiPlatformUpdateActionsBundle\Controller;
 use ApiPlatform\Core\Bridge\Symfony\Validator\Exception\ValidationException as ApiPlatformValidationException;
 use ApiPlatform\Core\Validator\ValidatorInterface as ApiPlatformValidatorInterface;
 use ITB\ApiPlatformUpdateActionsBundle\Command\CommandFactory;
+use ITB\ApiPlatformUpdateActionsBundle\Controller\ControllerException\RequestApiPlatformContextIsNullException;
 use ITB\ApiPlatformUpdateActionsBundle\Exception\RuntimeExceptionInterface;
 use ITB\ApiPlatformUpdateActionsBundle\Request\Request;
+use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Exception\ValidationFailedException;
 use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -48,6 +50,10 @@ final class Controller
      */
     public function __invoke(Request $data): object
     {
+        if (null === $data->apiPlatformContext) {
+            throw RequestApiPlatformContextIsNullException::create($data);
+        }
+
         // The exceptions thrown by this bundle will be wrapped with exceptions Api Platform will expect.
         try {
             $command = $this->commandFactory->createCommand($data);
@@ -63,7 +69,7 @@ final class Controller
         // The exception thrown by the ValidationMiddleware will be wrapped with the ApiPlatformValidationException,
         // which is expected by Api Platform.
         try {
-            return $this->handle($command);
+            return $this->handle(Envelope::wrap($command, [$data->apiPlatformContext->toContextStamp()]));
         } catch (ValidationFailedException $exception) {
             if (false === $this->ignoreMessengerValidation) {
                 throw new ApiPlatformValidationException($exception->getViolations(), previous: $exception);
