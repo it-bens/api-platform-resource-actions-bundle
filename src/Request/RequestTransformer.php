@@ -5,23 +5,20 @@ declare(strict_types=1);
 namespace ITB\ApiPlatformUpdateActionsBundle\Request;
 
 use ApiPlatform\Core\DataTransformer\DataTransformerInterface;
-use ITB\ApiPlatformUpdateActionsBundle\Command\ResourceActionCommandMap;
+use ITB\ApiPlatformUpdateActionsBundle\Action\ActionCollection;
 use ITB\ApiPlatformUpdateActionsBundle\Exception\RuntimeExceptionInterface;
-use ITB\ApiPlatformUpdateActionsBundle\Request\RequestTransformerException\ConstructionArgumentNameExtractionFailed;
 use ITB\ApiPlatformUpdateActionsBundle\Request\RequestTransformerException\ObjectToPopulateMissingException;
 use ITB\ApiPlatformUpdateActionsBundle\Request\RequestTransformerException\ObjectToPopulateNotAnObjectException;
 use ITB\ApiPlatformUpdateActionsBundle\Request\RequestTransformerException\ResourceClassMissingException;
 use ITB\ApiPlatformUpdateActionsBundle\Request\RequestTransformerException\ResourceClassNotAStringException;
-use ITB\ReflectionConstructor\ReflectionConstructor;
-use ReflectionException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 final class RequestTransformer implements DataTransformerInterface
 {
     /**
-     * @param ResourceActionCommandMap $resourceActionCommandMap
+     * @param ActionCollection $actionCollection
      */
-    public function __construct(private ResourceActionCommandMap $resourceActionCommandMap)
+    public function __construct(private ActionCollection $actionCollection)
     {
     }
 
@@ -59,7 +56,6 @@ final class RequestTransformer implements DataTransformerInterface
             throw ResourceClassNotAStringException::create();
         }
         $object->resource = $context['resource_class'];
-        $commandClass = $this->resourceActionCommandMap->getCommandClassForResourceAction($object->resource, $object->action);
 
         if (!array_key_exists(AbstractNormalizer::OBJECT_TO_POPULATE, $context)) {
             throw ObjectToPopulateMissingException::create();
@@ -67,20 +63,14 @@ final class RequestTransformer implements DataTransformerInterface
         if (!is_object($context[AbstractNormalizer::OBJECT_TO_POPULATE])) {
             throw ObjectToPopulateNotAnObjectException::create();
         }
-        try {
-            $reflectionConstructor = new ReflectionConstructor($commandClass);
 
-            $parametersInPayload = array_keys($object->payload);
-            $constructorParameterName = $reflectionConstructor->extractParameterNameForObject(
-                $context[AbstractNormalizer::OBJECT_TO_POPULATE],
-                $parametersInPayload
-            );
-        } catch (ReflectionException $exception) {
-            throw ConstructionArgumentNameExtractionFailed::create(
-                $commandClass,
-                get_class($context[AbstractNormalizer::OBJECT_TO_POPULATE]),
-                $exception
-            );
+        $action = $this->actionCollection->getAction($object->resource, $object->action);
+        $constructorParameterName = $action->getCommandMetadata()->getConstructorParameterNameForType(
+            get_class($context[AbstractNormalizer::OBJECT_TO_POPULATE]),
+            array_keys($object->payload)
+        );
+        if (null === $constructorParameterName) {
+            return $object;
         }
 
         $object->payload[$constructorParameterName] = $context[AbstractNormalizer::OBJECT_TO_POPULATE];

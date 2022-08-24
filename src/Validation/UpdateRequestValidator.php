@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace ITB\ApiPlatformUpdateActionsBundle\Validation;
 
+use ITB\ApiPlatformUpdateActionsBundle\Action\ActionCollectionException\ActionForResourceNotFound;
 use ITB\ApiPlatformUpdateActionsBundle\Command\CommandFactory;
-use ITB\ApiPlatformUpdateActionsBundle\Command\ResourceActionCommandMapException\CommandForResourceActionNotFound;
 use ITB\ApiPlatformUpdateActionsBundle\Exception\RuntimeExceptionInterface;
 use ITB\ApiPlatformUpdateActionsBundle\Request\Request;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
@@ -42,11 +42,11 @@ final class UpdateRequestValidator extends ConstraintValidator
 
         try {
             $this->commandFactory->createCommand($value);
-        } catch (CommandForResourceActionNotFound $exception) {
+        } catch (ActionForResourceNotFound $exception) {
             // The resource is checked for null value in the createCommand method.
             /** @var string $resource */
             $resource = $value->resource;
-            
+
             $this->context->buildViolation($constraint->actionUnknownMessage)
                 ->setParameter('{{ action }}', $value->action)
                 ->setParameter('{{ resource }}', $resource)

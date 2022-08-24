@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ITB\ApiPlatformUpdateActionsBundle\Command\ResourceActionCommandAssociationException;
+namespace ITB\ApiPlatformUpdateActionsBundle\Action\ActionException;
 
 use Exception;
 use ITB\ApiPlatformUpdateActionsBundle\Exception\CompileTimeExceptionInterface;
@@ -14,6 +14,6 @@ final class ResourceBlankException extends Exception implements CompileTimeExcep
      */
     public static function create(): ResourceBlankException
     {
-        return new self('The resource-action to command association resource must not be blank.');
+        return new self('The action resource must not be blank.');
     }
 }

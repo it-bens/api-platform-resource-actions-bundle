@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ITB\ApiPlatformUpdateActionsBundle\Command\ResourceActionCommandAssociationException;
+namespace ITB\ApiPlatformUpdateActionsBundle\Action\ActionException;
 
 use Exception;
 use ITB\ApiPlatformUpdateActionsBundle\Exception\CompileTimeExceptionInterface;
@@ -15,8 +15,6 @@ final class CommandNotAClassException extends Exception implements CompileTimeEx
      */
     public static function create(string $commandClass): CommandNotAClassException
     {
-        return new self(
-            sprintf('The resource-action to command association command "%s" is not a valid class name.', $commandClass)
-        );
+        return new self(sprintf('The action command class "%s" is not a valid class name.', $commandClass));
     }
 }

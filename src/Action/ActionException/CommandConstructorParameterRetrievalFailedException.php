@@ -2,32 +2,33 @@
 
 declare(strict_types=1);
 
-namespace ITB\ApiPlatformUpdateActionsBundle\Request\RequestTransformerException;
+namespace ITB\ApiPlatformUpdateActionsBundle\Action\ActionException;
 
 use Exception;
 use ITB\ApiPlatformUpdateActionsBundle\Exception\RuntimeExceptionInterface;
 use ReflectionException;
 use Throwable;
 
-final class ConstructionArgumentNameExtractionFailed extends Exception implements RuntimeExceptionInterface
+final class CommandConstructorParameterRetrievalFailedException extends Exception implements RuntimeExceptionInterface
 {
     /**
      * @param string $commandClass
-     * @param string $objectClass
+     * @param string $type
      * @param ReflectionException $exception
-     * @return ConstructionArgumentNameExtractionFailed
+     * @return CommandConstructorParameterRetrievalFailedException
      */
     public static function create(
         string $commandClass,
-        string $objectClass,
+        string $type,
         ReflectionException $exception
-    ): ConstructionArgumentNameExtractionFailed {
+    ): CommandConstructorParameterRetrievalFailedException {
         return new self(
             sprintf(
-                'The extraction of the constructor argument of type %s for command class %s failed.',
-                $objectClass,
+                'A parameter of type "%s" could not be extracted from action command class "%s".',
+                $type,
                 $commandClass
-            ), previous: $exception
+            ),
+            previous: $exception
         );
     }
 
