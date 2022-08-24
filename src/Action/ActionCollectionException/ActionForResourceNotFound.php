@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace ITB\ApiPlatformUpdateActionsBundle\Command\ResourceActionCommandMapException;
+namespace ITB\ApiPlatformUpdateActionsBundle\Action\ActionCollectionException;
 
 use Exception;
 use ITB\ApiPlatformUpdateActionsBundle\Exception\RuntimeExceptionInterface;
 use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
 use Throwable;
 
-final class CommandForResourceActionNotFound extends Exception implements RuntimeExceptionInterface
+final class ActionForResourceNotFound extends Exception implements RuntimeExceptionInterface
 {
     /**
      * @param string $message
@@ -23,13 +23,13 @@ final class CommandForResourceActionNotFound extends Exception implements Runtim
     /**
      * @param string $resource
      * @param string $action
-     * @return CommandForResourceActionNotFound
+     * @return ActionForResourceNotFound
      */
-    public static function create(string $resource, string $action): CommandForResourceActionNotFound
+    public static function create(string $resource, string $action): ActionForResourceNotFound
     {
         return new self(
             sprintf(
-                'There is no associated command for the API Platform resource "%s" and the action "%s".',
+                'There is no associated action for the API Platform resource "%s" and the action name "%s".',
                 $resource,
                 $action
             ),

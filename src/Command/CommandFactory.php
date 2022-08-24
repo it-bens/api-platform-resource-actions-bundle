@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ITB\ApiPlatformUpdateActionsBundle\Command;
 
+use ITB\ApiPlatformUpdateActionsBundle\Action\ActionCollection;
 use ITB\ApiPlatformUpdateActionsBundle\Command\CommandFactoryException\RequestResourceIsNullException;
 use ITB\ApiPlatformUpdateActionsBundle\Exception\RuntimeExceptionInterface;
 use ITB\ApiPlatformUpdateActionsBundle\Request\Request;
@@ -13,11 +14,11 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 final class CommandFactory
 {
     /**
-     * @param ResourceActionCommandMap $resourceActionCommandMap
+     * @param ActionCollection $actionCollection
      * @param DenormalizerInterface $denormalizer
      */
     public function __construct(
-        private ResourceActionCommandMap $resourceActionCommandMap,
+        private ActionCollection $actionCollection,
         private DenormalizerInterface $denormalizer
     ) {
     }
@@ -37,8 +38,8 @@ final class CommandFactory
             throw RequestResourceIsNullException::create($request);
         }
 
-        $commandClass = $this->resourceActionCommandMap->getCommandClassForResourceAction($request->resource, $request->action);
+        $action = $this->actionCollection->getAction($request->resource, $request->action);
 
-        return $this->denormalizer->denormalize($request->payload, $commandClass);
+        return $this->denormalizer->denormalize($request->payload, $action->getCommandClass());
     }
 }

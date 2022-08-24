@@ -5,16 +5,16 @@
         https://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="itb_api_platform_update_actions.resource_action_command_map" class="ITB\ApiPlatformUpdateActionsBundle\Command\ResourceActionCommandMap">
+        <service id="itb_api_platform_update_actions.action_collection" class="ITB\ApiPlatformUpdateActionsBundle\Action\ActionCollection">
             <argument/> <!-- filled in via configuration -->
             <argument type="service" id="api_platform.metadata.resource.metadata_factory"/>
         </service>
         <service id="itb_api_platform_update_actions.command_factory" class="ITB\ApiPlatformUpdateActionsBundle\Command\CommandFactory" public="false">
-            <argument type="service" id="itb_api_platform_update_actions.resource_action_command_map"/>
+            <argument type="service" id="itb_api_platform_update_actions.action_collection"/>
             <argument type="service" id="serializer"/>
         </service>
         <service id="itb_api_platform_update_actions.request_transformer" class="ITB\ApiPlatformUpdateActionsBundle\Request\RequestTransformer">
-            <argument type="service" id="itb_api_platform_update_actions.resource_action_command_map"/>
+            <argument type="service" id="itb_api_platform_update_actions.action_collection"/>
             <tag>api_platform.data_transformer</tag>
         </service>
         <service id="itb_api_platform_update_actions.controller" class="ITB\ApiPlatformUpdateActionsBundle\Controller\Controller" public="false">
@@ -31,15 +31,9 @@
         </service>
         <service alias="itb_api_platform_update_actions.update_request_validator" id="ITB\ApiPlatformUpdateActionsBundle\Validation\UpdateRequestValidator"/>
 
-        <service id="itb_api_platform_update_actions.resource_action_description_map" class="ITB\ApiPlatformUpdateActionsBundle\Docs\ResourceActionDescriptionMap">
-            <argument type="service" id="itb_api_platform_update_actions.resource_action_command_map"/>
-            <argument/> <!-- filled in via configuration -->
-        </service>
         <service id="itb_api_platform_update_actions.open_api_factory" decorates="api_platform.openapi.factory" class="ITB\ApiPlatformUpdateActionsBundle\Docs\OpenApiFactory">
             <argument type="service" id=".inner"/>
-            <argument type="service" id="itb_api_platform_update_actions.resource_action_command_map"/>
-            <argument type="service" id="itb_api_platform_update_actions.resource_action_description_map"/>
-            <argument type="service" id="api_platform.metadata.resource.metadata_factory"/>
+            <argument type="service" id="itb_api_platform_update_actions.action_collection"/>
             <argument type="service" id="api_platform.operation_path_resolver"/>
         </service>
         <service alias="itb_api_platform_update_actions.open_api_factory" id="ApiPlatform\Core\OpenApi\Factory\OpenApiFactoryInterface"/>

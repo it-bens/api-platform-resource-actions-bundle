@@ -124,10 +124,21 @@ If that validation passes, the denormalization is done again in the controller.
 To minimize the performance impact of this double denormalization, a serializer cache should be used.
 
 ### Commands without constructor
-A key mechanic of this bundle is to inject the resource object of the operation into the payload.
-Currently, the `RequestTransformer` requires a target class with a constructor and a parameter of that class to infer the parameter name.
-If a command class or DTO contains no constructor or if the constructor is private denormalization might not work.
-Furthermore, the OpenAPI extension could also fail, because it relies on constructors as well.
+The `RequestTransformer` will look for a constructor argument that has the type of the resource.
+If the command / DTO contains no constructor, it is assumed that the command requires no resource object.
+
+If the resource object is required by as a public property this should be set after the message was dispatched to the bus.
+
+This bundle uses the default Symfony serializer (created by the framework) for the denormalization.
+Therefore, this process is limited to the capabilities of the Symfony serializer(s).
+
+### Multiple operations with actions per resource
+The operation for an action is identified by the resource configuration of API Platform.
+It is assumed that an operation (of a specified resource) will use these actions if the 'input' key is set to `Request` 
+and the controller is set to `Controller` (of this bundle).
+If two or more operations of the same resource are configured like this, only the first one will be used.
+
+The controller would still be called by API Platform for any other operation, and it would fail to find its corresponding actions.
 
 ## Related Packages/Bundles
 Because the `Controller` will use the default bus to dispatch the command as a message, the usage of the
