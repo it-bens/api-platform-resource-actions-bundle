@@ -128,6 +128,7 @@ The `RequestTransformer` will look for a constructor argument that has the type 
 If the command / DTO contains no constructor, it is assumed that the command requires no resource object.
 
 If the resource object is required by as a public property this should be set after the message was dispatched to the bus.
+The Api Platform `ContextStamp` is created and added to the envelope like it would originate from Api Platform itself.
 
 This bundle uses the default Symfony serializer (created by the framework) for the denormalization.
 Therefore, this process is limited to the capabilities of the Symfony serializer(s).

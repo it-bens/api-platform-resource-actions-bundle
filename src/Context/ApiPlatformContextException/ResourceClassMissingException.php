@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ITB\ApiPlatformUpdateActionsBundle\Request\RequestTransformerException;
+namespace ITB\ApiPlatformUpdateActionsBundle\Context\ApiPlatformContextException;
 
 use Exception;
 use ITB\ApiPlatformUpdateActionsBundle\Exception\RuntimeExceptionInterface;

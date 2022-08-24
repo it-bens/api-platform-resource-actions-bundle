@@ -6,12 +6,8 @@ namespace ITB\ApiPlatformUpdateActionsBundle\Request;
 
 use ApiPlatform\Core\DataTransformer\DataTransformerInterface;
 use ITB\ApiPlatformUpdateActionsBundle\Action\ActionCollection;
+use ITB\ApiPlatformUpdateActionsBundle\Context\ApiPlatformContext;
 use ITB\ApiPlatformUpdateActionsBundle\Exception\RuntimeExceptionInterface;
-use ITB\ApiPlatformUpdateActionsBundle\Request\RequestTransformerException\ObjectToPopulateMissingException;
-use ITB\ApiPlatformUpdateActionsBundle\Request\RequestTransformerException\ObjectToPopulateNotAnObjectException;
-use ITB\ApiPlatformUpdateActionsBundle\Request\RequestTransformerException\ResourceClassMissingException;
-use ITB\ApiPlatformUpdateActionsBundle\Request\RequestTransformerException\ResourceClassNotAStringException;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 final class RequestTransformer implements DataTransformerInterface
 {
@@ -49,32 +45,22 @@ final class RequestTransformer implements DataTransformerInterface
      */
     public function transform($object, string $to, array $context = []): object
     {
-        if (!array_key_exists('resource_class', $context)) {
-            throw ResourceClassMissingException::create();
-        }
-        if (!is_string($context['resource_class'])) {
-            throw ResourceClassNotAStringException::create();
-        }
-        $object->resource = $context['resource_class'];
+        $apiPlatformContext = new ApiPlatformContext($context);
+        // The context will be used to generate a ContextStamp for the message bus.
+        $object->apiPlatformContext = $apiPlatformContext;
+        $object->resource = $apiPlatformContext->getResourceClass();
 
-        if (!array_key_exists(AbstractNormalizer::OBJECT_TO_POPULATE, $context)) {
-            throw ObjectToPopulateMissingException::create();
-        }
-        if (!is_object($context[AbstractNormalizer::OBJECT_TO_POPULATE])) {
-            throw ObjectToPopulateNotAnObjectException::create();
-        }
-
-        $action = $this->actionCollection->getAction($object->resource, $object->action);
+        $action = $this->actionCollection->getAction($apiPlatformContext->getResourceClass(), $object->action);
         $constructorParameterName = $action->getCommandMetadata()->getConstructorParameterNameForType(
-            get_class($context[AbstractNormalizer::OBJECT_TO_POPULATE]),
+            get_class($apiPlatformContext->getResourceObject()),
             array_keys($object->payload)
         );
         if (null === $constructorParameterName) {
             return $object;
         }
-
-        $object->payload[$constructorParameterName] = $context[AbstractNormalizer::OBJECT_TO_POPULATE];
-
+        
+        $object->payload[$constructorParameterName] = $apiPlatformContext->getResourceObject();
+        
         return $object;
     }
 }
