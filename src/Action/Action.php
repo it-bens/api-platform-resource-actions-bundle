@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace ITB\ApiPlatformUpdateActionsBundle\Action;
+namespace ITB\ApiPlatformResourceActionsBundle\Action;
 
 use ApiPlatform\Core\Exception\ResourceClassNotFoundException;
 use ApiPlatform\Core\Metadata\Resource\Factory\ResourceMetadataFactoryInterface;
-use ITB\ApiPlatformUpdateActionsBundle\Action\ActionException\CommandBlankException;
-use ITB\ApiPlatformUpdateActionsBundle\Action\ActionException\CommandNotAClassException;
-use ITB\ApiPlatformUpdateActionsBundle\Action\ActionException\DescriptionBlankException;
-use ITB\ApiPlatformUpdateActionsBundle\Action\ActionException\NameBlankException;
-use ITB\ApiPlatformUpdateActionsBundle\Action\ActionException\NoOperationConfiguredForActionException;
-use ITB\ApiPlatformUpdateActionsBundle\Action\ActionException\ResourceBlankException;
-use ITB\ApiPlatformUpdateActionsBundle\Action\ActionException\ResourceHasNoShortNameException;
-use ITB\ApiPlatformUpdateActionsBundle\Action\ActionException\ResourceNotRegisteredException;
-use ITB\ApiPlatformUpdateActionsBundle\Controller\Controller;
-use ITB\ApiPlatformUpdateActionsBundle\Exception\CompileTimeExceptionInterface;
-use ITB\ApiPlatformUpdateActionsBundle\Request\Request;
+use ITB\ApiPlatformResourceActionsBundle\Action\ActionException\CommandBlankException;
+use ITB\ApiPlatformResourceActionsBundle\Action\ActionException\CommandNotAClassException;
+use ITB\ApiPlatformResourceActionsBundle\Action\ActionException\DescriptionBlankException;
+use ITB\ApiPlatformResourceActionsBundle\Action\ActionException\NameBlankException;
+use ITB\ApiPlatformResourceActionsBundle\Action\ActionException\NoOperationConfiguredForActionException;
+use ITB\ApiPlatformResourceActionsBundle\Action\ActionException\ResourceBlankException;
+use ITB\ApiPlatformResourceActionsBundle\Action\ActionException\ResourceHasNoShortNameException;
+use ITB\ApiPlatformResourceActionsBundle\Action\ActionException\ResourceNotRegisteredException;
+use ITB\ApiPlatformResourceActionsBundle\Controller\Controller;
+use ITB\ApiPlatformResourceActionsBundle\Exception\CompileTimeExceptionInterface;
+use ITB\ApiPlatformResourceActionsBundle\Request\Request;
 
 final class Action
 {

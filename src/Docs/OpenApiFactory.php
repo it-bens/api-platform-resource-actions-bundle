@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace ITB\ApiPlatformUpdateActionsBundle\Docs;
+namespace ITB\ApiPlatformResourceActionsBundle\Docs;
 
 use ApiPlatform\Core\Api\OperationType;
 use ApiPlatform\Core\OpenApi\Factory\OpenApiFactoryInterface;
 use ApiPlatform\Core\OpenApi\OpenApi;
 use ApiPlatform\Core\PathResolver\OperationPathResolverInterface;
 use Console_Table;
-use ITB\ApiPlatformUpdateActionsBundle\Action\ActionCollection;
-use ITB\ApiPlatformUpdateActionsBundle\Action\ActionCommandMetadata;
-use ITB\ApiPlatformUpdateActionsBundle\Docs\OpenApiFactoryException\PathNotfoundException;
-use ITB\ApiPlatformUpdateActionsBundle\Exception\CompileTimeExceptionInterface;
+use ITB\ApiPlatformResourceActionsBundle\Action\ActionCollection;
+use ITB\ApiPlatformResourceActionsBundle\Action\ActionCommandMetadata;
+use ITB\ApiPlatformResourceActionsBundle\Docs\OpenApiFactoryException\PathNotfoundException;
+use ITB\ApiPlatformResourceActionsBundle\Exception\CompileTimeExceptionInterface;
 
 final class OpenApiFactory implements OpenApiFactoryInterface
 {

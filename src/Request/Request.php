@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace ITB\ApiPlatformUpdateActionsBundle\Request;
+namespace ITB\ApiPlatformResourceActionsBundle\Request;
 
-use ITB\ApiPlatformUpdateActionsBundle\Context\ApiPlatformContext;
-use ITB\ApiPlatformUpdateActionsBundle\Validation\UpdateRequest;
+use ITB\ApiPlatformResourceActionsBundle\Context\ApiPlatformContext;
+use ITB\ApiPlatformResourceActionsBundle\Validation\ActionRequest;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 final class Request
@@ -33,6 +33,6 @@ final class Request
      */
     public static function loadValidatorMetadata(ClassMetadata $metadata): void
     {
-        $metadata->addConstraint(new UpdateRequest());
+        $metadata->addConstraint(new ActionRequest());
     }
 }

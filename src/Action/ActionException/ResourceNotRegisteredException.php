@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace ITB\ApiPlatformUpdateActionsBundle\Action\ActionException;
+namespace ITB\ApiPlatformResourceActionsBundle\Action\ActionException;
 
 use ApiPlatform\Core\Exception\ResourceClassNotFoundException;
 use Exception;
-use ITB\ApiPlatformUpdateActionsBundle\Exception\CompileTimeExceptionInterface;
+use ITB\ApiPlatformResourceActionsBundle\Exception\CompileTimeExceptionInterface;
 
 final class ResourceNotRegisteredException extends Exception implements CompileTimeExceptionInterface
 {

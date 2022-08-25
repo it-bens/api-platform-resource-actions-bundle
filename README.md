@@ -1,4 +1,4 @@
-# The API Platform Update Action Bundle
+# The API Platform Resource Action Bundle
 
 API Platform provides an easy way to create a REST API for entities and models in a project. REST APIs are especially useful for CRUD applications. 
 Traditionally, the PUT item operation is used to update all properties of a resource and the PATCH operation is used for partial updates.
@@ -18,7 +18,7 @@ In the process the command object is created, it can be validated automatically 
 ## How to install the bundle?
 The bundle can be installed via Composer:
 ```bash
-composer require it-bens/api-platform-update-actions-bundle
+composer require it-bens/api-platform-resource-actions-bundle
 ```
 If you're using Symfony Flex, the bundle will be automatically enabled (but has to be configured manually). 
 For older apps, enable it in your Kernel class.
@@ -41,7 +41,7 @@ The command contains the entity it will be applied on and one more property.
 
 The action itself can be registered via configuration:
 ```yaml
-itb_api_platform_update_actions:
+itb_api_platform_resource_actions:
   resources:
     TheNamespace\TheEntity:
       increase-property-two:
@@ -58,8 +58,8 @@ The actions can be used after an API Platform operation is configured to use the
 TheNamespace\TheEntity:
   itemOperations:
     patch:
-      input: ITB\ApiPlatformUpdateActionsBundle\Request\Request
-      controller: ITB\ApiPlatformUpdateActionsBundle\Controller\Controller
+      input: ITB\ApiPlatformResourceActionsBundle\Request\Request
+      controller: ITB\ApiPlatformResourceActionsBundle\Controller\Controller
       openapi_context:
         summary: Updates the entity with defined actions.
 ```
@@ -69,7 +69,7 @@ The process is closely coupled to API Platform and contains several steps:
 1. API Platform denormalizes the raw data into the generic `Request` DTO of this bundle.
 2. API Platform calls the `RequestTransformer` as a data transformer. 
 It injects the resource class and the resource object into the payload of the `Request` object.
-3. API Platform validates the `Request` object with the `UpdateRequestValidator`.
+3. API Platform validates the `Request` object with the `ActionRequestValidator`.
 It checks if the action is registered for the resource and if the payload contains the necessary data by using the `CommandFactory`.
 4. API Platform/The router calls the `Controller` and passes the `Request` object to it.
 5. The controller denormalizes the payload data into the command.
@@ -82,7 +82,7 @@ As stated before, this bundle uses the Symfony messenger to dispatch the command
 Therefor validation can be done in two ways: explicitly in the controller or with a message bus middleware.
 Both can be turned on and off via configuration:
 ```yaml
-itb_api_platform_update_actions:
+itb_api_platform_resource_actions:
   validate_command: false
   ignore_messenger_validation: false
 ```
@@ -119,7 +119,7 @@ In the case of two properties of that type, the bundle itself would work (like d
 
 ### Double Denormalization
 The `Request` class is validated as a generic class by API Platform. 
-The `UpdateRequestValidator` tries to denormalize the payload to the command object and catches denormalization exceptions.
+The `ActionRequestValidator` tries to denormalize the payload to the command object and catches denormalization exceptions.
 If that validation passes, the denormalization is done again in the controller. 
 To minimize the performance impact of this double denormalization, a serializer cache should be used.
 

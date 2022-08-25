@@ -1,6 +1,6 @@
 {
-  "name": "it-bens/api-platform-update-actions-bundle",
-  "description": "Bundle that can add actions to API Platform operations to deserialize payloads into command objects and dispatch them via message bus.",
+  "name": "it-bens/api-platform-resource-actions-bundle",
+  "description": "Bundle that can add actions to API Platform operations to deserialize payloads into command objects / DTOs and dispatch them via message bus.",
   "type": "symfony-bundle",
   "license": "MIT",
   "authors": [
@@ -32,9 +32,9 @@
     "sort-packages": true
   },
   "autoload": {
-    "psr-4": { "ITB\\ApiPlatformUpdateActionsBundle\\": "src/" }
+    "psr-4": { "ITB\\ApiPlatformResourceActionsBundle\\": "src/" }
   },
   "autoload-dev": {
-    "psr-4": { "Tests\\ITB\\ApiPlatformUpdateActionsBundle\\": "tests/" }
+    "psr-4": { "Tests\\ITB\\ApiPlatformResourceActionsBundle\\": "tests/" }
   }
 }

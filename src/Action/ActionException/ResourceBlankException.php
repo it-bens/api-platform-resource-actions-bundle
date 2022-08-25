@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace ITB\ApiPlatformUpdateActionsBundle\Action\ActionException;
+namespace ITB\ApiPlatformResourceActionsBundle\Action\ActionException;
 
 use Exception;
-use ITB\ApiPlatformUpdateActionsBundle\Exception\CompileTimeExceptionInterface;
+use ITB\ApiPlatformResourceActionsBundle\Exception\CompileTimeExceptionInterface;
 
 final class ResourceBlankException extends Exception implements CompileTimeExceptionInterface
 {

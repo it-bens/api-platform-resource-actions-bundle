@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace ITB\ApiPlatformUpdateActionsBundle\Controller;
+namespace ITB\ApiPlatformResourceActionsBundle\Controller;
 
 use ApiPlatform\Core\Bridge\Symfony\Validator\Exception\ValidationException as ApiPlatformValidationException;
 use ApiPlatform\Core\Validator\ValidatorInterface as ApiPlatformValidatorInterface;
-use ITB\ApiPlatformUpdateActionsBundle\Command\CommandFactory;
-use ITB\ApiPlatformUpdateActionsBundle\Controller\ControllerException\RequestApiPlatformContextIsNullException;
-use ITB\ApiPlatformUpdateActionsBundle\Exception\RuntimeExceptionInterface;
-use ITB\ApiPlatformUpdateActionsBundle\Request\Request;
+use ITB\ApiPlatformResourceActionsBundle\Command\CommandFactory;
+use ITB\ApiPlatformResourceActionsBundle\Controller\ControllerException\RequestApiPlatformContextIsNullException;
+use ITB\ApiPlatformResourceActionsBundle\Exception\RuntimeExceptionInterface;
+use ITB\ApiPlatformResourceActionsBundle\Request\Request;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Exception\ValidationFailedException;
 use Symfony\Component\Messenger\HandleTrait;

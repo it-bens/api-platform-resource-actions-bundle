@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace ITB\ApiPlatformUpdateActionsBundle;
+namespace ITB\ApiPlatformResourceActionsBundle;
 
-use ITB\ApiPlatformUpdateActionsBundle\DependencyInjection\ITBApiPlatformUpdateActionsExtension;
+use ITB\ApiPlatformResourceActionsBundle\DependencyInjection\ITBApiPlatformResourceActionsExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-final class ITBApiPlatformUpdateActionsBundle extends Bundle
+final class ITBApiPlatformResourceActionsBundle extends Bundle
 {
     /**
      * @param ContainerBuilder $container
@@ -21,10 +21,10 @@ final class ITBApiPlatformUpdateActionsBundle extends Bundle
     /**
      * Overridden to allow for the custom extension alias.
      */
-    public function getContainerExtension(): ITBApiPlatformUpdateActionsExtension
+    public function getContainerExtension(): ITBApiPlatformResourceActionsExtension
     {
         if (null === $this->extension) {
-            $this->extension = new ITBApiPlatformUpdateActionsExtension();
+            $this->extension = new ITBApiPlatformResourceActionsExtension();
         }
 
         return $this->extension;

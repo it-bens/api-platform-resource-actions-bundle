@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace ITB\ApiPlatformUpdateActionsBundle\Docs\OpenApiFactoryException;
+namespace ITB\ApiPlatformResourceActionsBundle\Docs\OpenApiFactoryException;
 
 use Exception;
-use ITB\ApiPlatformUpdateActionsBundle\Exception\CompileTimeExceptionInterface;
+use ITB\ApiPlatformResourceActionsBundle\Exception\CompileTimeExceptionInterface;
 
 final class PathNotfoundException extends Exception implements CompileTimeExceptionInterface
 {

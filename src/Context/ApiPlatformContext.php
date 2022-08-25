@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace ITB\ApiPlatformUpdateActionsBundle\Context;
+namespace ITB\ApiPlatformResourceActionsBundle\Context;
 
 use ApiPlatform\Core\Bridge\Symfony\Messenger\ContextStamp;
-use ITB\ApiPlatformUpdateActionsBundle\Context\ApiPlatformContextException\ObjectToPopulateMissingException;
-use ITB\ApiPlatformUpdateActionsBundle\Context\ApiPlatformContextException\ObjectToPopulateNotAnObjectException;
-use ITB\ApiPlatformUpdateActionsBundle\Context\ApiPlatformContextException\ResourceClassMissingException;
-use ITB\ApiPlatformUpdateActionsBundle\Context\ApiPlatformContextException\ResourceClassNotAStringException;
-use ITB\ApiPlatformUpdateActionsBundle\Exception\RuntimeExceptionInterface;
+use ITB\ApiPlatformResourceActionsBundle\Context\ApiPlatformContextException\ObjectToPopulateMissingException;
+use ITB\ApiPlatformResourceActionsBundle\Context\ApiPlatformContextException\ObjectToPopulateNotAnObjectException;
+use ITB\ApiPlatformResourceActionsBundle\Context\ApiPlatformContextException\ResourceClassMissingException;
+use ITB\ApiPlatformResourceActionsBundle\Context\ApiPlatformContextException\ResourceClassNotAStringException;
+use ITB\ApiPlatformResourceActionsBundle\Exception\RuntimeExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 final class ApiPlatformContext

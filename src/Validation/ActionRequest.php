@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ITB\ApiPlatformUpdateActionsBundle\Validation;
+namespace ITB\ApiPlatformResourceActionsBundle\Validation;
 
 use Attribute;
 use Symfony\Component\Validator\Constraint;
@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraint;
  * @Annotation
  */
 #[Attribute]
-final class UpdateRequest extends Constraint
+final class ActionRequest extends Constraint
 {
     public string $actionUnknownMessage = 'The action "{{ action }}" is unknown for the resource "{{ resource }}".';
     public string $denormalizationFailedMessage = 'The command could not be crated with the provided data.';

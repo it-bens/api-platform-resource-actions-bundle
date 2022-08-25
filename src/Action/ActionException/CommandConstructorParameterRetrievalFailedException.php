@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace ITB\ApiPlatformUpdateActionsBundle\Action\ActionException;
+namespace ITB\ApiPlatformResourceActionsBundle\Action\ActionException;
 
 use Exception;
-use ITB\ApiPlatformUpdateActionsBundle\Exception\RuntimeExceptionInterface;
+use ITB\ApiPlatformResourceActionsBundle\Exception\RuntimeExceptionInterface;
 use ReflectionException;
 use Throwable;
 

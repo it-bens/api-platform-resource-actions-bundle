@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace ITB\ApiPlatformUpdateActionsBundle\Request;
+namespace ITB\ApiPlatformResourceActionsBundle\Request;
 
 use ApiPlatform\Core\DataTransformer\DataTransformerInterface;
-use ITB\ApiPlatformUpdateActionsBundle\Action\ActionCollection;
-use ITB\ApiPlatformUpdateActionsBundle\Context\ApiPlatformContext;
-use ITB\ApiPlatformUpdateActionsBundle\Exception\RuntimeExceptionInterface;
+use ITB\ApiPlatformResourceActionsBundle\Action\ActionCollection;
+use ITB\ApiPlatformResourceActionsBundle\Context\ApiPlatformContext;
+use ITB\ApiPlatformResourceActionsBundle\Exception\RuntimeExceptionInterface;
 
 final class RequestTransformer implements DataTransformerInterface
 {

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace ITB\ApiPlatformUpdateActionsBundle\Context\ApiPlatformContextException;
+namespace ITB\ApiPlatformResourceActionsBundle\Context\ApiPlatformContextException;
 
 use Exception;
-use ITB\ApiPlatformUpdateActionsBundle\Exception\RuntimeExceptionInterface;
+use ITB\ApiPlatformResourceActionsBundle\Exception\RuntimeExceptionInterface;
 use Throwable;
 
 final class ResourceClassMissingException extends Exception implements RuntimeExceptionInterface

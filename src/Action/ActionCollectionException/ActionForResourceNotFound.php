@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace ITB\ApiPlatformUpdateActionsBundle\Action\ActionCollectionException;
+namespace ITB\ApiPlatformResourceActionsBundle\Action\ActionCollectionException;
 
 use Exception;
-use ITB\ApiPlatformUpdateActionsBundle\Exception\RuntimeExceptionInterface;
+use ITB\ApiPlatformResourceActionsBundle\Exception\RuntimeExceptionInterface;
 use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
 use Throwable;
 

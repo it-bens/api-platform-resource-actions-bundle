@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace ITB\ApiPlatformUpdateActionsBundle\Validation;
+namespace ITB\ApiPlatformResourceActionsBundle\Validation;
 
-use ITB\ApiPlatformUpdateActionsBundle\Action\ActionCollectionException\ActionForResourceNotFound;
-use ITB\ApiPlatformUpdateActionsBundle\Command\CommandFactory;
-use ITB\ApiPlatformUpdateActionsBundle\Exception\RuntimeExceptionInterface;
-use ITB\ApiPlatformUpdateActionsBundle\Request\Request;
+use ITB\ApiPlatformResourceActionsBundle\Action\ActionCollectionException\ActionForResourceNotFound;
+use ITB\ApiPlatformResourceActionsBundle\Command\CommandFactory;
+use ITB\ApiPlatformResourceActionsBundle\Exception\RuntimeExceptionInterface;
+use ITB\ApiPlatformResourceActionsBundle\Request\Request;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
-final class UpdateRequestValidator extends ConstraintValidator
+final class ActionRequestValidator extends ConstraintValidator
 {
     /**
      * @param CommandFactory $commandFactory
@@ -31,8 +31,8 @@ final class UpdateRequestValidator extends ConstraintValidator
      */
     public function validate(mixed $value, Constraint $constraint): void
     {
-        if (!$constraint instanceof UpdateRequest) {
-            throw new UnexpectedTypeException($constraint, UpdateRequest::class);
+        if (!$constraint instanceof ActionRequest) {
+            throw new UnexpectedTypeException($constraint, ActionRequest::class);
         }
 
         if (!$value instanceof Request) {

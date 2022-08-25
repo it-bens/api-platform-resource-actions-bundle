@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace ITB\ApiPlatformUpdateActionsBundle\Action;
+namespace ITB\ApiPlatformResourceActionsBundle\Action;
 
 use ApiPlatform\Core\Metadata\Resource\Factory\ResourceMetadataFactoryInterface;
-use ITB\ApiPlatformUpdateActionsBundle\Action\ActionCollectionException\ActionForResourceNotFound;
-use ITB\ApiPlatformUpdateActionsBundle\Exception\CompileTimeExceptionInterface;
-use ITB\ApiPlatformUpdateActionsBundle\Exception\RuntimeExceptionInterface;
+use ITB\ApiPlatformResourceActionsBundle\Action\ActionCollectionException\ActionForResourceNotFound;
+use ITB\ApiPlatformResourceActionsBundle\Exception\CompileTimeExceptionInterface;
+use ITB\ApiPlatformResourceActionsBundle\Exception\RuntimeExceptionInterface;
 
 final class ActionCollection
 {

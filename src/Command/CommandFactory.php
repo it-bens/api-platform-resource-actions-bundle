@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace ITB\ApiPlatformUpdateActionsBundle\Command;
+namespace ITB\ApiPlatformResourceActionsBundle\Command;
 
-use ITB\ApiPlatformUpdateActionsBundle\Action\ActionCollection;
-use ITB\ApiPlatformUpdateActionsBundle\Command\CommandFactoryException\RequestResourceIsNullException;
-use ITB\ApiPlatformUpdateActionsBundle\Exception\RuntimeExceptionInterface;
-use ITB\ApiPlatformUpdateActionsBundle\Request\Request;
+use ITB\ApiPlatformResourceActionsBundle\Action\ActionCollection;
+use ITB\ApiPlatformResourceActionsBundle\Command\CommandFactoryException\RequestResourceIsNullException;
+use ITB\ApiPlatformResourceActionsBundle\Exception\RuntimeExceptionInterface;
+use ITB\ApiPlatformResourceActionsBundle\Request\Request;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace ITB\ApiPlatformUpdateActionsBundle\Action;
+namespace ITB\ApiPlatformResourceActionsBundle\Action;
 
-use ITB\ApiPlatformUpdateActionsBundle\Action\ActionException\CommandConstructorParameterRetrievalFailedException;
-use ITB\ApiPlatformUpdateActionsBundle\Action\ActionException\CommandNotAClassException;
-use ITB\ApiPlatformUpdateActionsBundle\Exception\CompileTimeExceptionInterface;
-use ITB\ApiPlatformUpdateActionsBundle\Exception\RuntimeExceptionInterface;
+use ITB\ApiPlatformResourceActionsBundle\Action\ActionException\CommandConstructorParameterRetrievalFailedException;
+use ITB\ApiPlatformResourceActionsBundle\Action\ActionException\CommandNotAClassException;
+use ITB\ApiPlatformResourceActionsBundle\Exception\CompileTimeExceptionInterface;
+use ITB\ApiPlatformResourceActionsBundle\Exception\RuntimeExceptionInterface;
 use ITB\ReflectionConstructor\ReflectionConstructor;
 use ReflectionClass;
 use ReflectionException;

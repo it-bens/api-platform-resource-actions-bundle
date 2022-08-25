@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ITB\ApiPlatformUpdateActionsBundle\Exception;
+namespace ITB\ApiPlatformResourceActionsBundle\Exception;
 
 use Throwable;
 
