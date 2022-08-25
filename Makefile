@@ -1,4 +1,4 @@
-.PHONY: help docker-build composer-install composer-update composer-require composer-require-dev composer-remove composer-clean
+.PHONY: help docker-build composer-install composer-update composer-require composer-require-dev composer-remove composer-clean style-check style-fix code-check test
 .DEFAULT_GOAL := help
 
 help:
@@ -34,7 +34,7 @@ style-fix:
 	docker-compose run --rm -T app vendor/bin/phpcbf --standard=PSR1,PSR12 --exclude=Generic.Files.LineLength $(folders)
 
 code-check:
-	docker-compose run --rm -T app vendor/bin/phpstan analyse -c phpstan.neon --level 8
+	docker-compose run --rm -T app vendor/bin/phpstan analyse -c phpstan.neon
 
 test:
 	docker-compose run --rm -T app vendor/bin/phpunit -c phpunit.xml.dist
@@ -47,7 +47,7 @@ github-tests-phpunit: github-composer-install
 	./vendor/bin/phpunit -c ./phpunit.xml.dist
 
 github-tests-phpstan: github-composer-install
-	./vendor/bin/phpstan analyse -c ./phpstan.neon --level 8
+	./vendor/bin/phpstan analyse -c ./phpstan.neon
 
 github-tests-codesniffer: github-composer-install
 	./vendor/bin/phpcs --standard=PSR1,PSR12 --exclude=Generic.Files.LineLength src tests
