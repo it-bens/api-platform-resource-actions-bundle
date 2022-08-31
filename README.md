@@ -1,21 +1,31 @@
 # The API Platform Resource Action Bundle
 
-API Platform provides an easy way to create a REST API for entities and models in a project. REST APIs are especially useful for CRUD applications. 
-Traditionally, the PUT item operation is used to update all properties of a resource and the PATCH operation is used for partial updates.
+> :warning: The bundle is currently not tested by any unit or functional tests! It is used in non-public projects and works so far.
 
-However, generic update operations are not always useful or appropriate.
-Defined commands are a good way to update the data of a resource (entity/model or whatever). 
-They can be validated, handled via messenger and the business logic is encapsulated in the resource that the command is applied on.
+## Motivation
+### Let's start with Symfony & API Platform :construction_worker:
+Symfony & API Platform are a great combination to easily create a REST API for a CRUD application.
+The flexibility of a REST API is limited by design. Because the operations are generic, it's difficult to depict more specific operations.
 
-API Platform can use such commands objects as input DTOs, but it gets a little tedious when it comes to updates.
-Normally, every update operation with a command would require a custom operation (maybe including a request transformer and a custom controller).
+Typical ways of updating a models are to apply a full update operation (REST PUT) or to apply partial updates (REST PATCH).
+Often model updates are connected to certain requirements or side effects. The implementation of them often can become very complex.
 
-This bundle provides an easy way to allow defined resource updates via command with only one operation (e.g. PATCH).
-In the process the command object is created, it can be validated automatically (or not) and sent to the message bus for handling.
+One way to solve this problem is to use commands objects that are applied to the model. 
+The command implementations can be separated to check for requirements or to trigger side effects without writing longer and longer methods.
+Unfortunately, this concept collides with the simplicity of REST APIs implemented with API Platform. Custom operations can be implemented,
+but this results in a lot of boilerplate code. API Platform could also populate a generic update-DTO and dispatch it via bus.
+But the handler of this DTO would have to create the command objects and apply them. This would require a more or less complex logic,
+which is difficult to maintain and test.
 
-> ⚠ The bundle is currently not tested by any unit or functional tests! It is used in non-public projects and works so far.
+### API Platform resource actions to the rescue! :superhero:
+In a REST API context the mentioned 'models' can be called 'resources'. An action refers to the mentioned commands but is more general.
 
-## How to install the bundle?
+This bundle provides the ability to attach actions to an API Platform resource operation via configuration.
+Internal a generic update DTO is used and later unpacked to create the desired action. After processing, the action object is dispatched via bus.
+It can be handled from there like it came from any other source like form request or a console command.
+This helps to keep API-logic-code out of your models and make them more agnostic about their data source.
+
+## Installation
 The bundle can be installed via Composer:
 ```bash
 composer require it-bens/api-platform-resource-actions-bundle
@@ -23,7 +33,7 @@ composer require it-bens/api-platform-resource-actions-bundle
 If you're using Symfony Flex, the bundle will be automatically enabled (but has to be configured manually). 
 For older apps, enable it in your Kernel class.
 
-## How are the actions registered?
+## Action configuration
 To register an action, three things are required: a DTO, a configuration entry and a proper resource configuration in API Platform.
 
 Let's assume there is a command DTO like this:
@@ -64,22 +74,12 @@ TheNamespace\TheEntity:
         summary: Updates the entity with defined actions.
 ```
 
-## How does the overall process work?
-The process is closely coupled to API Platform and contains several steps:
-1. API Platform denormalizes the raw data into the generic `Request` DTO of this bundle.
-2. API Platform calls the `RequestTransformer` as a data transformer. 
-It injects the resource class and the resource object into the payload of the `Request` object.
-3. API Platform validates the `Request` object with the `ActionRequestValidator`.
-It checks if the action is registered for the resource and if the payload contains the necessary data by using the `CommandFactory`.
-4. API Platform/The router calls the `Controller` and passes the `Request` object to it.
-5. The controller denormalizes the payload data into the command.
-6. The controller validates the command with the API Platform validator (if enabled).
-7. The controller dispatches the command into the default bus and returns the result
-(and converts any validation exception into an API Platform validation constraint violation).
+> :information_source: A configuration with PHP attributes is in development but not finished.
 
-## What about the validation?
-As stated before, this bundle uses the Symfony messenger to dispatch the command as a message.
-Therefor validation can be done in two ways: explicitly in the controller or with a message bus middleware.
+## Action validation
+This bundle uses the Symfony messenger to dispatch the command as a message.
+Therefor validation can be done in two ways: explicitly in the controller of this bundle or with a message bus middleware
+(like the Symfony `ValidationMiddleware`).
 Both can be turned on and off via configuration:
 ```yaml
 itb_api_platform_resource_actions:
@@ -92,7 +92,11 @@ is caught and turned into an API Platform constraint violation exception (`ignor
 or will be passed through (`ignore_messenger_validation = true`).
 
 ## The Open API documentation
-As we know, the code is not documentation enough!
+| !["The code is documentation enough" button](docs/images/the-code-is-documentation-enough.png?raw=true "The code is documentation enough - button") |
+| :--: |
+| *Image provided by GetDigital (https://www.getdigital.de/geek-button-the-code-is-documentation-enough.html)* |
+
+Well NO! But here: maybe! :thinking:
 
 API Platform can automatically create an OpenAPI documentation. This bundle hooks into this process via decoration
 like described here: https://api-platform.com/docs/core/openapi/. 
@@ -105,7 +109,20 @@ The `Payload` column shows the properties of the command class.
 If the class contains a property that has the same type as the API Platform resource, it will be removed from the list
 (because this is most likely the object, the command will be applied on).
 
-## Current Limitations of this bundle
+## Internal process
+The process is closely coupled to API Platform and contains several steps:
+1. API Platform denormalizes the raw data into the generic `Request` DTO of this bundle.
+2. API Platform calls the `RequestTransformer` as a data transformer.
+   It injects the resource class and the resource object into the payload of the `Request` object.
+3. API Platform validates the `Request` object with the `ActionRequestValidator`.
+   It checks if the action is registered for the resource and if the payload contains the necessary data by using the `CommandFactory`.
+4. API Platform/The router calls the `Controller` and passes the `Request` object to it.
+5. The controller denormalizes the payload data into the command.
+6. The controller validates the command with the API Platform validator (if enabled).
+7. The controller dispatches the command into the default bus and returns the result
+   (and converts any validation exception into an API Platform validation constraint violation).
+
+## Current Limitations
 ### Commands with two properties of the resource type
 This bundle can handle the creation of a command that has two properties with the type of the related resources.
 It uses the ITB `ReflectionConstructor` (https://github.com/it-bens/reflection-constructor),
