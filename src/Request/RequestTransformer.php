@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace ITB\ApiPlatformResourceActionsBundle\Request;
 
 use ApiPlatform\Core\DataTransformer\DataTransformerInterface;
-use ITB\ApiPlatformResourceActionsBundle\Action\ActionCollection;
+use ITB\ApiPlatformResourceActionsBundle\Action\ResourceActionCollection;
 use ITB\ApiPlatformResourceActionsBundle\Context\ApiPlatformContext;
 use ITB\ApiPlatformResourceActionsBundle\Exception\RuntimeExceptionInterface;
 
 final class RequestTransformer implements DataTransformerInterface
 {
     /**
-     * @param ActionCollection $actionCollection
+     * @param ResourceActionCollection $actionCollection
      */
-    public function __construct(private ActionCollection $actionCollection)
+    public function __construct(private ResourceActionCollection $actionCollection)
     {
     }
 

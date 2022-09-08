@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ITB\ApiPlatformResourceActionsBundle\Action\ActionException;
+namespace ITB\ApiPlatformResourceActionsBundle\Action\ResourceActionException;
 
 use ApiPlatform\Core\Exception\ResourceClassNotFoundException;
 use Exception;

@@ -9,8 +9,8 @@ use ApiPlatform\Core\OpenApi\Factory\OpenApiFactoryInterface;
 use ApiPlatform\Core\OpenApi\OpenApi;
 use ApiPlatform\Core\PathResolver\OperationPathResolverInterface;
 use Console_Table;
-use ITB\ApiPlatformResourceActionsBundle\Action\ActionCollection;
-use ITB\ApiPlatformResourceActionsBundle\Action\ActionCommandMetadata;
+use ITB\ApiPlatformResourceActionsBundle\Action\ResourceActionCollection;
+use ITB\ApiPlatformResourceActionsBundle\Action\ResourceActionCommandMetadata;
 use ITB\ApiPlatformResourceActionsBundle\Docs\OpenApiFactoryException\PathNotfoundException;
 use ITB\ApiPlatformResourceActionsBundle\Exception\CompileTimeExceptionInterface;
 
@@ -18,12 +18,12 @@ final class OpenApiFactory implements OpenApiFactoryInterface
 {
     /**
      * @param OpenApiFactoryInterface $decorated
-     * @param ActionCollection $actionCollection
+     * @param ResourceActionCollection $actionCollection
      * @param OperationPathResolverInterface $operationPathResolver
      */
     public function __construct(
         private OpenApiFactoryInterface $decorated,
-        private ActionCollection $actionCollection,
+        private ResourceActionCollection $actionCollection,
         private OperationPathResolverInterface $operationPathResolver
     ) {
     }
@@ -102,11 +102,11 @@ final class OpenApiFactory implements OpenApiFactoryInterface
     }
 
     /**
-     * @param ActionCommandMetadata $commandMetadata
+     * @param ResourceActionCommandMetadata $commandMetadata
      * @param string $resource
      * @return string
      */
-    private function getPayloadProperties(ActionCommandMetadata $commandMetadata, string $resource): string
+    private function getPayloadProperties(ResourceActionCommandMetadata $commandMetadata, string $resource): string
     {
         $properties = '';
         foreach ($commandMetadata->getConstructorParameters() as $parameter) {

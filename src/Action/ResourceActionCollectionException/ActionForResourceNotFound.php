@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ITB\ApiPlatformResourceActionsBundle\Action\ActionCollectionException;
+namespace ITB\ApiPlatformResourceActionsBundle\Action\ResourceActionCollectionException;
 
 use Exception;
 use ITB\ApiPlatformResourceActionsBundle\Exception\RuntimeExceptionInterface;
