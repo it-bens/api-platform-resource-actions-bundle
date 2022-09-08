@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ITB\ApiPlatformResourceActionsBundle\Validation;
 
-use ITB\ApiPlatformResourceActionsBundle\Action\ActionCollectionException\ActionForResourceNotFound;
+use ITB\ApiPlatformResourceActionsBundle\Action\ResourceActionCollectionException\ActionForResourceNotFound;
 use ITB\ApiPlatformResourceActionsBundle\Command\CommandFactory;
 use ITB\ApiPlatformResourceActionsBundle\Exception\RuntimeExceptionInterface;
 use ITB\ApiPlatformResourceActionsBundle\Request\Request;

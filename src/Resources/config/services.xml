@@ -9,16 +9,16 @@
             <argument/> <!-- filled in via configuration -->
             <argument/> <!-- filled in via configuration -->
         </service>
-        <service id="itb_api_platform_resource_actions.action_collection" class="ITB\ApiPlatformResourceActionsBundle\Action\ActionCollection">
+        <service id="itb_api_platform_resource_actions.resource_action_collection" class="ITB\ApiPlatformResourceActionsBundle\Action\ResourceActionCollection">
             <argument type="service" id="itb_api_platform_resource_actions.resource_action_definition_collection"/>
             <argument type="service" id="api_platform.metadata.resource.metadata_factory"/>
         </service>
         <service id="itb_api_platform_resource_actions.command_factory" class="ITB\ApiPlatformResourceActionsBundle\Command\CommandFactory" public="false">
-            <argument type="service" id="itb_api_platform_resource_actions.action_collection"/>
+            <argument type="service" id="itb_api_platform_resource_actions.resource_action_collection"/>
             <argument type="service" id="serializer"/>
         </service>
         <service id="itb_api_platform_resource_actions.request_transformer" class="ITB\ApiPlatformResourceActionsBundle\Request\RequestTransformer">
-            <argument type="service" id="itb_api_platform_resource_actions.action_collection"/>
+            <argument type="service" id="itb_api_platform_resource_actions.resource_action_collection"/>
             <tag>api_platform.data_transformer</tag>
         </service>
         <service id="itb_api_platform_resource_actions.controller" class="ITB\ApiPlatformResourceActionsBundle\Controller\Controller" public="false">
@@ -37,7 +37,7 @@
 
         <service id="itb_api_platform_resource_actions.open_api_factory" decorates="api_platform.openapi.factory" class="ITB\ApiPlatformResourceActionsBundle\Docs\OpenApiFactory">
             <argument type="service" id=".inner"/>
-            <argument type="service" id="itb_api_platform_resource_actions.action_collection"/>
+            <argument type="service" id="itb_api_platform_resource_actions.resource_action_collection"/>
             <argument type="service" id="api_platform.operation_path_resolver"/>
         </service>
         <service alias="itb_api_platform_resource_actions.open_api_factory" id="ApiPlatform\Core\OpenApi\Factory\OpenApiFactoryInterface"/>

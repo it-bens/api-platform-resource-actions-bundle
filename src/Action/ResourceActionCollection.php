@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace ITB\ApiPlatformResourceActionsBundle\Action;
 
 use ApiPlatform\Core\Metadata\Resource\Factory\ResourceMetadataFactoryInterface;
-use ITB\ApiPlatformResourceActionsBundle\Action\ActionCollectionException\ActionForResourceNotFound;
+use ITB\ApiPlatformResourceActionsBundle\Action\ResourceActionCollectionException\ActionForResourceNotFound;
 use ITB\ApiPlatformResourceActionsBundle\Definition\ResourceActionDefinitionCollection;
 use ITB\ApiPlatformResourceActionsBundle\Exception\CompileTimeExceptionInterface;
 use ITB\ApiPlatformResourceActionsBundle\Exception\RuntimeExceptionInterface;
 
-final class ActionCollection
+final class ResourceActionCollection
 {
-    /** @var array<string, Action> */
+    /** @var array<string, ResourceAction> */
     private array $actions = [];
 
     /**
@@ -25,7 +25,7 @@ final class ActionCollection
         ResourceMetadataFactoryInterface $resourceMetadataFactory
     ) {
         foreach ($resourceActionDefinitionCollection->getResourceActionDefinitions() as $resourceActionDefinition) {
-            $action = new Action(
+            $action = new ResourceAction(
                 $resourceActionDefinition->action,
                 $resourceActionDefinition->resource,
                 $resourceActionDefinition->command,
@@ -40,10 +40,10 @@ final class ActionCollection
     /**
      * @param string $resourceClass
      * @param string $actionName
-     * @return Action
+     * @return ResourceAction
      * @throws RuntimeExceptionInterface
      */
-    public function getAction(string $resourceClass, string $actionName): Action
+    public function getAction(string $resourceClass, string $actionName): ResourceAction
     {
         if (!array_key_exists($resourceClass . $actionName, $this->actions)) {
             throw ActionForResourceNotFound::create($resourceClass, $actionName);
@@ -53,7 +53,7 @@ final class ActionCollection
     }
 
     /**
-     * @return Action[]
+     * @return ResourceAction[]
      */
     public function getActions(): array
     {
@@ -62,12 +62,12 @@ final class ActionCollection
 
     /**
      * @param string $resource
-     * @return Action[]
+     * @return ResourceAction[]
      */
     public function getActionsForResource(string $resource): array
     {
         return array_values(
-            array_filter($this->actions, static function (Action $action) use ($resource): bool {
+            array_filter($this->actions, static function (ResourceAction $action) use ($resource): bool {
                 return $resource === $action->getResource();
             })
         );

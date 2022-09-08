@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace ITB\ApiPlatformResourceActionsBundle\Action;
 
-use ITB\ApiPlatformResourceActionsBundle\Action\ActionException\CommandConstructorParameterRetrievalFailedException;
-use ITB\ApiPlatformResourceActionsBundle\Action\ActionException\CommandNotAClassException;
+use ITB\ApiPlatformResourceActionsBundle\Action\ResourceActionException\CommandConstructorParameterRetrievalFailedException;
+use ITB\ApiPlatformResourceActionsBundle\Action\ResourceActionException\CommandNotAClassException;
 use ITB\ApiPlatformResourceActionsBundle\Exception\CompileTimeExceptionInterface;
 use ITB\ApiPlatformResourceActionsBundle\Exception\RuntimeExceptionInterface;
 use ITB\ReflectionConstructor\ReflectionConstructor;
@@ -13,7 +13,7 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionParameter;
 
-final class ActionCommandMetadata
+final class ResourceActionCommandMetadata
 {
     /** @var ReflectionClass $reflectionClass */
     /** @phpstan-ignore-next-line */

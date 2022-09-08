@@ -6,22 +6,22 @@ namespace ITB\ApiPlatformResourceActionsBundle\Action;
 
 use ApiPlatform\Core\Exception\ResourceClassNotFoundException;
 use ApiPlatform\Core\Metadata\Resource\Factory\ResourceMetadataFactoryInterface;
-use ITB\ApiPlatformResourceActionsBundle\Action\ActionException\CommandBlankException;
-use ITB\ApiPlatformResourceActionsBundle\Action\ActionException\CommandNotAClassException;
-use ITB\ApiPlatformResourceActionsBundle\Action\ActionException\DescriptionBlankException;
-use ITB\ApiPlatformResourceActionsBundle\Action\ActionException\NameBlankException;
-use ITB\ApiPlatformResourceActionsBundle\Action\ActionException\NoOperationConfiguredForActionException;
-use ITB\ApiPlatformResourceActionsBundle\Action\ActionException\ResourceBlankException;
-use ITB\ApiPlatformResourceActionsBundle\Action\ActionException\ResourceHasNoShortNameException;
-use ITB\ApiPlatformResourceActionsBundle\Action\ActionException\ResourceNotRegisteredException;
+use ITB\ApiPlatformResourceActionsBundle\Action\ResourceActionException\CommandBlankException;
+use ITB\ApiPlatformResourceActionsBundle\Action\ResourceActionException\CommandNotAClassException;
+use ITB\ApiPlatformResourceActionsBundle\Action\ResourceActionException\DescriptionBlankException;
+use ITB\ApiPlatformResourceActionsBundle\Action\ResourceActionException\NameBlankException;
+use ITB\ApiPlatformResourceActionsBundle\Action\ResourceActionException\NoOperationConfiguredForActionException;
+use ITB\ApiPlatformResourceActionsBundle\Action\ResourceActionException\ResourceBlankException;
+use ITB\ApiPlatformResourceActionsBundle\Action\ResourceActionException\ResourceHasNoShortNameException;
+use ITB\ApiPlatformResourceActionsBundle\Action\ResourceActionException\ResourceNotRegisteredException;
 use ITB\ApiPlatformResourceActionsBundle\Controller\Controller;
 use ITB\ApiPlatformResourceActionsBundle\Exception\CompileTimeExceptionInterface;
 use ITB\ApiPlatformResourceActionsBundle\Request\Request;
 
-final class Action
+final class ResourceAction
 {
-    /** @var ActionCommandMetadata $commandMetadata */
-    private ActionCommandMetadata $commandMetadata;
+    /** @var ResourceActionCommandMetadata $commandMetadata */
+    private ResourceActionCommandMetadata $commandMetadata;
 
     /** @var string $resourceName */
     private string $resourceName;
@@ -60,7 +60,7 @@ final class Action
             throw CommandNotAClassException::create($this->commandClass);
         }
 
-        $this->commandMetadata = new ActionCommandMetadata($this->commandClass);
+        $this->commandMetadata = new ResourceActionCommandMetadata($this->commandClass);
 
         if ('' === $this->description) {
             throw DescriptionBlankException::create();
@@ -142,9 +142,9 @@ final class Action
     }
 
     /**
-     * @return ActionCommandMetadata
+     * @return ResourceActionCommandMetadata
      */
-    public function getCommandMetadata(): ActionCommandMetadata
+    public function getCommandMetadata(): ResourceActionCommandMetadata
     {
         return $this->commandMetadata;
     }

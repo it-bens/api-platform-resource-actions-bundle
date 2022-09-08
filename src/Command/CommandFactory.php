@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ITB\ApiPlatformResourceActionsBundle\Command;
 
-use ITB\ApiPlatformResourceActionsBundle\Action\ActionCollection;
+use ITB\ApiPlatformResourceActionsBundle\Action\ResourceActionCollection;
 use ITB\ApiPlatformResourceActionsBundle\Command\CommandFactoryException\RequestResourceIsNullException;
 use ITB\ApiPlatformResourceActionsBundle\Exception\RuntimeExceptionInterface;
 use ITB\ApiPlatformResourceActionsBundle\Request\Request;
@@ -14,11 +14,11 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 final class CommandFactory
 {
     /**
-     * @param ActionCollection $actionCollection
+     * @param ResourceActionCollection $actionCollection
      * @param DenormalizerInterface $denormalizer
      */
     public function __construct(
-        private ActionCollection $actionCollection,
+        private ResourceActionCollection $actionCollection,
         private DenormalizerInterface $denormalizer
     ) {
     }
