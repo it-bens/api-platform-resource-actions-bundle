@@ -49,7 +49,12 @@ class AppendToPropertyOne {
 ```
 The command contains the entity it will be applied on and one more property.
 
-The action itself can be registered via configuration:
+The actions can be defined (and registered) via bundle configuration and/or class attributes.
+Both sources can be combined, but an exception will be thrown if an action is defined more than once for a resource.
+
+The bundle will check if the resources, used in the definitions, are registered in API Platform.
+
+### Action definition with configuration files
 ```yaml
 itb_api_platform_resource_actions:
   resources:
@@ -58,10 +63,26 @@ itb_api_platform_resource_actions:
         command_class: TheNamespace\AppendToPropertyOne
         description: Appends a string to property one.
 ```
-The `resource` key refers to the API Platform resources. The bundle will check if the resource is registered in API Platform.
+The `resource` key refers to the API Platform resources.
 The sub-key represents the action name (it will not be normalized into snake-case). 
 The description is optional and will be used for the OpenAPI documentation (blank descriptions result in exceptions).
 
+### Action definition with attributes
+```php
+namespace TheNamespace;
+
+use ApiPlatform\Core\Annotation\ApiResource;
+use ITB\ApiPlatformResourceActionsBundle\Attribute\ResourceAction;
+
+#[ApiResource]
+#[ResourceAction(actionName: 'increase-property-two', commandClass: AppendToPropertyOne::class, description: 'Appends a string to property one.')]
+class TheEntity {
+    ...
+}
+```
+The `description` parameter is optional and can also be null.
+
+### Configuration of API Platform
 So far this bundle won't do anything (except registering some services). 
 The actions can be used after an API Platform operation is configured to use the controller and the request DTO provided by this bundle.
 ```yaml
@@ -74,7 +95,24 @@ TheNamespace\TheEntity:
         summary: Updates the entity with defined actions.
 ```
 
-> :information_source: A configuration with PHP attributes is in development but not finished.
+Of course the configuration can be done via attributes as well.
+```php
+use ITB\ApiPlatformResourceActionsBundle\Request\Request;
+use ITB\ApiPlatformResourceActionsBundle\Controller\Controller;
+use ITB\ApiPlatformResourceActionsBundle\Attribute\ResourceAction;
+
+#[ApiResource(itemOperations: [
+    'patch' => [
+        'input': Request::class,
+        'controller': Controller::class
+    ]
+])]
+#[ResourceAction(...)]
+class TheEntity {
+    ...
+}
+```
+> :information_source: The `messenger` option doesn't have to be enabled, because the controller will dispatch the command to the message bus anyway.
 
 ## Action validation
 This bundle uses the Symfony messenger to dispatch the command as a message.
