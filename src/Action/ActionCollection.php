@@ -6,6 +6,7 @@ namespace ITB\ApiPlatformResourceActionsBundle\Action;
 
 use ApiPlatform\Core\Metadata\Resource\Factory\ResourceMetadataFactoryInterface;
 use ITB\ApiPlatformResourceActionsBundle\Action\ActionCollectionException\ActionForResourceNotFound;
+use ITB\ApiPlatformResourceActionsBundle\Definition\ResourceActionDefinitionCollection;
 use ITB\ApiPlatformResourceActionsBundle\Exception\CompileTimeExceptionInterface;
 use ITB\ApiPlatformResourceActionsBundle\Exception\RuntimeExceptionInterface;
 
@@ -15,22 +16,20 @@ final class ActionCollection
     private array $actions = [];
 
     /**
-     * @param array<int, array{
-     *     'resource': string,
-     *     'action': string,
-     *     'commandClass': class-string,
-     *     'description': string|null
-     * }> $actionsData
+     * @param ResourceActionDefinitionCollection $resourceActionDefinitionCollection
+     * @param ResourceMetadataFactoryInterface $resourceMetadataFactory
      * @throws CompileTimeExceptionInterface
      */
-    public function __construct(array $actionsData, ResourceMetadataFactoryInterface $resourceMetadataFactory)
-    {
-        foreach ($actionsData as $actionData) {
+    public function __construct(
+        ResourceActionDefinitionCollection $resourceActionDefinitionCollection,
+        ResourceMetadataFactoryInterface $resourceMetadataFactory
+    ) {
+        foreach ($resourceActionDefinitionCollection->getResourceActionDefinitions() as $resourceActionDefinition) {
             $action = new Action(
-                $actionData['action'],
-                $actionData['resource'],
-                $actionData['commandClass'],
-                $actionData['description'],
+                $resourceActionDefinition->action,
+                $resourceActionDefinition->resource,
+                $resourceActionDefinition->command,
+                $resourceActionDefinition->description,
                 $resourceMetadataFactory
             );
 
