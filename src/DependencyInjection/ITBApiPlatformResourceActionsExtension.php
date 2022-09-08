@@ -36,19 +36,8 @@ final class ITBApiPlatformResourceActionsExtension extends Extension
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
-        $actionsData = [];
-        foreach ($config['resources'] as $resource => $actions) {
-            foreach ($actions as $action => $actionData) {
-                $actionsData[] = [
-                    'resource' => $resource,
-                    'action' => $action,
-                    'commandClass' => $actionData['command_class'],
-                    'description' => $actionData['description']
-                ];
-            }
-        }
-        $actionCollection = $container->getDefinition('itb_api_platform_resource_actions.action_collection');
-        $actionCollection->replaceArgument(0, $actionsData);
+        $resourceActionDefinitionCollection = $container->getDefinition('itb_api_platform_resource_actions.resource_action_definition_collection');
+        $resourceActionDefinitionCollection->replaceArgument(0, $config['resources']);
 
         $controller = $container->getDefinition('itb_api_platform_resource_actions.controller');
         $controller->replaceArgument(3, $config['validate_command']);

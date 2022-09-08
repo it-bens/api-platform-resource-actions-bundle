@@ -5,8 +5,11 @@
         https://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="itb_api_platform_resource_actions.action_collection" class="ITB\ApiPlatformResourceActionsBundle\Action\ActionCollection">
+        <service id="itb_api_platform_resource_actions.resource_action_definition_collection" class="ITB\ApiPlatformResourceActionsBundle\Definition\ResourceActionDefinitionCollection">
             <argument/> <!-- filled in via configuration -->
+        </service>
+        <service id="itb_api_platform_resource_actions.action_collection" class="ITB\ApiPlatformResourceActionsBundle\Action\ActionCollection">
+            <argument type="service" id="itb_api_platform_resource_actions.resource_action_definition_collection"/>
             <argument type="service" id="api_platform.metadata.resource.metadata_factory"/>
         </service>
         <service id="itb_api_platform_resource_actions.command_factory" class="ITB\ApiPlatformResourceActionsBundle\Command\CommandFactory" public="false">
