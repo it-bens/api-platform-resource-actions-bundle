@@ -37,7 +37,13 @@ final class OpenApiFactory implements OpenApiFactoryInterface
     {
         $openApi = $this->decorated->__invoke($context);
 
+        $processedActions = [];
         foreach ($this->actionCollection->getActions() as $action) {
+            // The description should be added only once per operation.
+            if (in_array($action->getResource() . $action->getOperationName(), $processedActions)) {
+                continue;
+            }
+
             /** @phpstan-ignore-next-line */
             $path = $this->operationPathResolver->resolveOperationPath(
                 $action->getResourceName(),
@@ -51,7 +57,7 @@ final class OpenApiFactory implements OpenApiFactoryInterface
             if (null === $pathItem) {
                 throw PathNotfoundException::create($apiPath);
             }
-            $patchOperation = $pathItem->getPatch();
+            $operation = $pathItem->{'get' . ucfirst(strtolower($action->getOperationData()['method']))}();
 
             $description = '---' . PHP_EOL . PHP_EOL;
             $description .= '## Actions' . PHP_EOL;
@@ -60,13 +66,13 @@ final class OpenApiFactory implements OpenApiFactoryInterface
             $openApi->getPaths()->addPath(
                 $apiPath,
                 $pathItem->withPatch(
-                /** @phpstan-ignore-next-line */
-                    $patchOperation->withDescription(
-                    /** @phpstan-ignore-next-line */
-                        $patchOperation->getDescription() . PHP_EOL . PHP_EOL . $description
+                    $operation->withDescription(
+                        $operation->getDescription() . PHP_EOL . PHP_EOL . $description
                     )
                 )
             );
+
+            $processedActions[] = $action->getResource() . $action->getOperationName();
         }
 
         return $openApi;
