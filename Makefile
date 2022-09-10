@@ -44,7 +44,7 @@ github-composer-install:
 	composer install --no-interaction --no-progress --no-suggest --optimize-autoloader
 
 github-tests-phpunit: github-composer-install
-	./vendor/bin/phpunit -c ./phpunit.xml.dist
+	XDEBUG_MODE=coverage ./vendor/bin/phpunit -c ./phpunit.xml.dist
 
 github-tests-phpstan: github-composer-install
 	./vendor/bin/phpstan analyse -c ./phpstan.neon

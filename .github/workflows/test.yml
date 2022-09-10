@@ -1,0 +1,195 @@
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+    tags:
+      - "**"
+
+name: "Tests"
+
+jobs:
+  style-check:
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-20.04]
+        php-version: [8.1]
+        experimental: [false]
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: ctype, mbstring, iconv, intl
+          coverage: none
+          tools: composer
+
+      - name: Get composer cache directory
+        id: composercache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composercache.outputs.dir }}
+          key: composer-${{ runner.os }}-${{ matrix.php-version }}-${{ hashFiles('composer.*') }}
+          restore-keys: |
+            composer-${{ runner.os }}-${{ matrix.php-version }}-
+            composer-${{ runner.os }}-
+            composer-
+
+      - name: "Run tests"
+        run: make github-tests-codesniffer
+
+  code-check:
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-20.04]
+        php-version: [8.1]
+        experimental: [false]
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: ctype, mbstring, iconv, intl
+          coverage: none
+          tools: composer
+
+      - name: Get composer cache directory
+        id: composercache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composercache.outputs.dir }}
+          key: composer-${{ runner.os }}-${{ matrix.php-version }}-${{ hashFiles('composer.*') }}
+          restore-keys: |
+            composer-${{ runner.os }}-${{ matrix.php-version }}-
+            composer-${{ runner.os }}-
+            composer-
+
+      - name: "Run tests"
+        run: make github-tests-phpstan
+
+  unit-tests:
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-20.04]
+        php-version: [8.0]
+        experimental: [false]
+        include:
+          - os: ubuntu-20.04
+            php-version: 8.1
+            experimental: false
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: ctype, mbstring, iconv, intl
+          coverage: none
+          tools: composer
+
+      - name: Get composer cache directory
+        id: composercache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composercache.outputs.dir }}
+          key: composer-${{ runner.os }}-${{ matrix.php-version }}-${{ hashFiles('composer.*') }}
+          restore-keys: |
+            composer-${{ runner.os }}-${{ matrix.php-version }}-
+            composer-${{ runner.os }}-
+            composer-
+
+      - name: "Run tests"
+        run: make github-tests-phpunit
+
+  code-coverage:
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-20.04 ]
+        php-version: [ 8.1 ]
+        experimental: [ false ]
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: intl, xdebug
+          coverage: xdebug
+          tools: composer
+
+      - name: Get composer cache directory
+        id: composercache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composercache.outputs.dir }}
+          key: composer-${{ runner.os }}-${{ matrix.php-version }}-${{ hashFiles('composer.*') }}
+          restore-keys: |
+            composer-${{ runner.os }}-${{ matrix.php-version }}-
+            composer-${{ runner.os }}-
+            composer-
+
+      - name: Install Composer dependencies
+        uses: php-actions/composer@v6
+        with:
+          php_version: ${{ matrix.php-version }}
+          dev: yes
+          args: --no-interaction --no-progress --no-suggest --optimize-autoloader
+
+      - name: "Run tests"
+        uses: php-actions/phpunit@v2
+        with:
+          php_extensions: intl xdebug
+          bootstrap: vendor/autoload.php
+          configuration: phpunit.github.xml
+        env:
+          XDEBUG_MODE: coverage
+
+      - name: "Upload coverage to Codecov"
+        uses: codecov/codecov-action@v2
+        with:
+          file: coverage.xml
+          flags: unittests
+          fail_ci_if_error: true
+          verbose: true
