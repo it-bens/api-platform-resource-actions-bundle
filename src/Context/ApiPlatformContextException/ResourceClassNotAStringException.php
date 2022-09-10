@@ -24,5 +24,6 @@ final class ResourceClassNotAStringException extends Exception implements Runtim
     public function createApiPlatformCompatibleException(): Throwable
     {
         // TODO: Implement createApiPlatformCompatibleException() method.
+        return new Exception();
     }
 }

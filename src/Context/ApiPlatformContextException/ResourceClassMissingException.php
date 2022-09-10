@@ -24,5 +24,6 @@ final class ResourceClassMissingException extends Exception implements RuntimeEx
     public function createApiPlatformCompatibleException(): Throwable
     {
         // TODO: Implement createApiPlatformCompatibleException() method.
+        return new Exception();
     }
 }

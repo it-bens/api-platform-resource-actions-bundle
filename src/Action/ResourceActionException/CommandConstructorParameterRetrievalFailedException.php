@@ -32,8 +32,12 @@ final class CommandConstructorParameterRetrievalFailedException extends Exceptio
         );
     }
 
+    /**
+     * @return Throwable
+     */
     public function createApiPlatformCompatibleException(): Throwable
     {
         // TODO: Implement createApiPlatformCompatibleException() method.
+        return new Exception();
     }
 }

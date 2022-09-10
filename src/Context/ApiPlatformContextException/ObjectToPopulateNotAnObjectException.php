@@ -30,5 +30,6 @@ final class ObjectToPopulateNotAnObjectException extends Exception implements Ru
     public function createApiPlatformCompatibleException(): Throwable
     {
         // TODO: Implement createApiPlatformCompatibleException() method.
+        return new Exception();
     }
 }
