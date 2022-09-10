@@ -1,0 +1,2 @@
+resource_action_directories:
+  - '%kernel.project_dir%/tests/Mock'

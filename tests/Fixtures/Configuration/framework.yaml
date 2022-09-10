@@ -1,0 +1,6 @@
+cache:
+messenger:
+router:
+  resource: '%kernel.project_dir%/tests/Fixtures/Routing'
+  type: directory
+validation:

@@ -1,0 +1,2 @@
+mapping:
+  paths: [ '%kernel.project_dir%/tests/Mock' ]

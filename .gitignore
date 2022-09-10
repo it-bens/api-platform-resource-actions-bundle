@@ -10,6 +10,7 @@
 ###> symfony/phpunit-bridge ###
 .phpunit
 .phpunit.result.cache
+coverage.xml
 /phpunit.xml
-/tests/cache/
+/var/cache/
 ###< symfony/phpunit-bridge ###

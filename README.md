@@ -1,7 +1,5 @@
 # The API Platform Resource Action Bundle
 
-> :warning: The bundle is currently not tested by any unit or functional tests! It is used in non-public projects and works so far.
-
 ## Motivation
 ### Let's start with Symfony & API Platform :construction_worker:
 Symfony & API Platform are a great combination to easily create a REST API for a CRUD application.

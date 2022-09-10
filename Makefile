@@ -1,4 +1,4 @@
-.PHONY: help docker-build composer-install composer-update composer-require composer-require-dev composer-remove composer-clean style-check style-fix code-check test
+.PHONY: help docker-build composer-install composer-update composer-require composer-require-dev composer-remove composer-clean style-check style-fix code-check phpunit-tests
 .DEFAULT_GOAL := help
 
 help:
@@ -36,7 +36,7 @@ style-fix:
 code-check:
 	docker-compose run --rm -T app vendor/bin/phpstan analyse -c phpstan.neon
 
-test:
+phpunit-tests:
 	docker-compose run --rm -T app vendor/bin/phpunit -c phpunit.xml.dist
 
 

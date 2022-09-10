@@ -1,0 +1,6 @@
+resource_action_directories:
+  - '%kernel.project_dir%/tests/Mock'
+resources:
+  Tests\ITB\ApiPlatformResourceActionsBundle\Mock\Entity\Document:
+    do-nothing:
+      command_class: Tests\ITB\ApiPlatformResourceActionsBundle\Mock\Command\DoNothingWithTheDocument
