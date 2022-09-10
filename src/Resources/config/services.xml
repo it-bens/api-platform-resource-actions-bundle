@@ -32,8 +32,9 @@
 
         <service id="itb_api_platform_resource_actions.action_request_validator" class="ITB\ApiPlatformResourceActionsBundle\Validation\ActionRequestValidator">
             <argument type="service" id="itb_api_platform_resource_actions.command_factory"/>
+            <tag>validator.constraint_validator</tag>
         </service>
-        <service alias="itb_api_platform_resource_actions.action_request_validator" id="ITB\ApiPlatformResourceActionsBundle\Validation\ActionRequestValidator"/>
+        <service alias="itb_api_platform_resource_actions.action_request_validator" id="ITB\ApiPlatformResourceActionsBundle\Validation\ActionRequestValidator" public="true"/>
 
         <service id="itb_api_platform_resource_actions.open_api_factory" decorates="api_platform.openapi.factory" class="ITB\ApiPlatformResourceActionsBundle\Docs\OpenApiFactory">
             <argument type="service" id=".inner"/>
