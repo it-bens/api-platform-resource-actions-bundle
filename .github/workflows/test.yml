@@ -98,10 +98,12 @@ jobs:
       matrix:
         os: [ubuntu-20.04]
         php-version: [8.0]
+        composer-lock: [composer_symfony_54.lock, composer_symfony_60.lock]
         experimental: [false]
         include:
           - os: ubuntu-20.04
             php-version: 8.1
+            composer-lock: composer_symfony_61.lock
             experimental: false
 
     steps:
@@ -115,6 +117,12 @@ jobs:
           extensions: ctype, mbstring, iconv, intl
           coverage: none
           tools: composer
+
+      - name: copy composer.lock
+        uses: canastro/copy-file-action@master
+        with:
+          source: ".github/workflows/composer/${{ matrix.composer-lock }}"
+          target: "composer.lock"
 
       - name: Get composer cache directory
         id: composercache
@@ -182,7 +190,7 @@ jobs:
         with:
           php_extensions: intl xdebug
           bootstrap: vendor/autoload.php
-          configuration: phpunit.github.xml
+          configuration: .github/workflows/phpunit.xml.dist
         env:
           XDEBUG_MODE: coverage
 
