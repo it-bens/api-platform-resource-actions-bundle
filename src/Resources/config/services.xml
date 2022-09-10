@@ -41,5 +41,9 @@
             <argument type="service" id="api_platform.operation_path_resolver"/>
         </service>
         <service alias="itb_api_platform_resource_actions.open_api_factory" id="ApiPlatform\Core\OpenApi\Factory\OpenApiFactoryInterface"/>
+
+        <service id="api_platform.serializer.normalizer.item_already_object" class="ITB\ApiPlatformResourceActionsBundle\ApiPlatform\AlreadyObjectItemNormalizer" decorates="api_platform.serializer.normalizer.item">
+            <argument type="service" id="api_platform.serializer.normalizer.item_already_object.inner"/>
+        </service>
     </services>
 </container>
