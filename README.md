@@ -1,5 +1,9 @@
 # The API Platform Resource Action Bundle
 
+![Maintenance Status](https://img.shields.io/badge/Maintained%3F-yes-green.svg)
+[![Tests](https://github.com/it-bens/api-platform-resource-actions-bundle/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/it-bens/api-platform-resource-actions-bundle/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/it-bens/api-platform-resource-actions-bundle/branch/master/graph/badge.svg?token=P3RZM11FNV)](https://codecov.io/gh/it-bens/api-platform-resource-actions-bundle)
+
 ## Motivation
 ### Let's start with Symfony & API Platform :construction_worker:
 Symfony & API Platform are a great combination to easily create a REST API for a CRUD application.
