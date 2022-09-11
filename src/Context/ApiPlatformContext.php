@@ -59,12 +59,4 @@ final class ApiPlatformContext
     {
         return $this->resourceObject;
     }
-
-    /**
-     * @return ContextStamp
-     */
-    public function toContextStamp(): ContextStamp
-    {
-        return new ContextStamp($this->context);
-    }
 }
