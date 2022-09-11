@@ -24,8 +24,6 @@
         <service id="itb_api_platform_resource_actions.controller" class="ITB\ApiPlatformResourceActionsBundle\Controller\Controller" public="false">
             <argument type="service" id="itb_api_platform_resource_actions.command_factory"/>
             <argument type="service" id="api_platform.validator"/>
-            <argument type="service" id="messenger.default_bus"/>
-            <argument/> <!-- filled in via configuration -->
             <argument/> <!-- filled in via configuration -->
         </service>
         <service alias="itb_api_platform_resource_actions.controller" id="ITB\ApiPlatformResourceActionsBundle\Controller\Controller" public="true"/>

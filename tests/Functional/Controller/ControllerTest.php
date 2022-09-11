@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Tests\ITB\ApiPlatformResourceActionsBundle\Functional\BuildAndBootKernelTrait;
 use Tests\ITB\ApiPlatformResourceActionsBundle\Functional\BuildRequestTrait;
-use Tests\ITB\ApiPlatformResourceActionsBundle\Mock\Entity\Document;
+use Tests\ITB\ApiPlatformResourceActionsBundle\Mock\Command\DoNothingWithTheDocument;
 use Throwable;
 
 final class ControllerTest extends TestCase
@@ -73,6 +73,6 @@ final class ControllerTest extends TestCase
     public function testValidWithoutValidation(Controller $controller, Request $request): void
     {
         $result = $controller($request);
-        $this->assertInstanceOf(Document::class, $result);
+        $this->assertInstanceOf(DoNothingWithTheDocument::class, $result);
     }
 }
