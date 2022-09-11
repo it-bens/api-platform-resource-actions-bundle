@@ -120,29 +120,22 @@ class TheEntity {
     ...
 }
 ```
-> :information_source: The `messenger` option doesn't have to be enabled, because the controller will dispatch the command to the message bus anyway.
+> :information_source: The `messenger` option has to be enabled, if the command should be handled there. Custom data persisters could be used as well.
 
 ## Action validation
-This bundle uses the Symfony messenger to dispatch the command as a message.
-Therefor validation can be done in two ways: explicitly in the controller of this bundle or with a message bus middleware
-(like the Symfony `ValidationMiddleware`).
-Both can be turned on and off via configuration:
+This bundle can validate the created command manually. API Platform validates the input, but as this stage, the input object is generic.
+That's why the command is validated in the controller. It's disabled by default and can be enabled in the bundle configuration.
 ```yaml
 itb_api_platform_resource_actions:
-  validate_command: false
-  ignore_messenger_validation: false
+  validate_command: true
 ```
-The `validate_command` key determines if the API Platform validator is used to validate the command explicitly.
-The `ignore_messenger_validation` key determines if a validation exception, thrown by the message bus, 
-is caught and turned into an API Platform constraint violation exception (`ignore_messenger_validation = false`)
-or will be passed through (`ignore_messenger_validation = true`).
 
 ## The Open API documentation
 | !["The code is documentation enough" button](docs/images/the-code-is-documentation-enough.png?raw=true "The code is documentation enough - button") |
 | :--: |
 | *Image provided by GetDigital (https://www.getdigital.de/geek-button-the-code-is-documentation-enough.html)* |
 
-Well NO! But here: maybe! :thinking:
+Well NO! But here: maybe? :thinking:
 
 API Platform can automatically create an OpenAPI documentation. This bundle hooks into this process via decoration
 like described here: https://api-platform.com/docs/core/openapi/. 
@@ -165,8 +158,7 @@ The process is closely coupled to API Platform and contains several steps:
 4. API Platform/The router calls the `Controller` and passes the `Request` object to it.
 5. The controller denormalizes the payload data into the command.
 6. The controller validates the command with the API Platform validator (if enabled).
-7. The controller dispatches the command into the default bus and returns the result
-   (and converts any validation exception into an API Platform validation constraint violation).
+7. The controller returns the command to the default API Platform flow.
 
 ## Current Limitations
 ### Commands with two properties of the resource type
@@ -190,9 +182,6 @@ To minimize the performance impact of this double denormalization, a serializer 
 The `RequestTransformer` will look for a constructor argument that has the type of the resource.
 If the command / DTO contains no constructor, it is assumed that the command requires no resource object.
 
-If the resource object is required by as a public property this should be set after the message was dispatched to the bus.
-The Api Platform `ContextStamp` is created and added to the envelope like it would originate from Api Platform itself.
-
 This bundle uses the default Symfony serializer (created by the framework) for the denormalization.
 Therefore, this process is limited to the capabilities of the Symfony serializer(s).
 
@@ -205,7 +194,7 @@ If two or more operations of the same resource are configured like this, only th
 The controller would still be called by API Platform for any other operation, and it would fail to find its corresponding actions.
 
 ## Related Packages/Bundles
-Because the `Controller` will use the default bus to dispatch the command as a message, the usage of the
+Because API Platform will always use the default bus to dispatch the command as a message, the usage of the
 Message Bus Redirect Bundle (https://github.com/it-bens/message-bus-redirect-bundle) comes in handy.
 
 ## Contributing
