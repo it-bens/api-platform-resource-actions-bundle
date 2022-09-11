@@ -1,6 +1,6 @@
 {
   "name": "it-bens/api-platform-resource-actions-bundle",
-  "description": "Bundle that can add actions to API Platform operations to deserialize payloads into command objects / DTOs and dispatch them via message bus.",
+  "description": "Bundle that can add actions to API Platform operations to deserialize payloads into command objects and pass them to the API Platform workflow.",
   "type": "symfony-bundle",
   "license": "MIT",
   "authors": [
