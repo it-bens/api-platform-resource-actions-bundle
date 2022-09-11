@@ -41,7 +41,6 @@ final class ITBApiPlatformResourceActionsExtension extends Extension
         $resourceActionDefinitionCollection->replaceArgument(1, $config['resource_action_directories']);
 
         $controller = $container->getDefinition('itb_api_platform_resource_actions.controller');
-        $controller->replaceArgument(3, $config['validate_command']);
-        $controller->replaceArgument(4, $config['ignore_messenger_validation']);
+        $controller->replaceArgument(2, $config['validate_command']);
     }
 }

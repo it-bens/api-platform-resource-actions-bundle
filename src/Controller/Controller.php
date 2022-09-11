@@ -10,35 +10,24 @@ use ITB\ApiPlatformResourceActionsBundle\Command\CommandFactory;
 use ITB\ApiPlatformResourceActionsBundle\Controller\ControllerException\RequestApiPlatformContextIsNullException;
 use ITB\ApiPlatformResourceActionsBundle\Exception\RuntimeExceptionInterface;
 use ITB\ApiPlatformResourceActionsBundle\Request\Request;
-use Symfony\Component\Messenger\Envelope;
-use Symfony\Component\Messenger\Exception\ValidationFailedException;
-use Symfony\Component\Messenger\HandleTrait;
-use Symfony\Component\Messenger\MessageBusInterface;
 use Throwable;
 
 final class Controller
 {
-    use HandleTrait;
-
     /**
      * @param CommandFactory $commandFactory
      * @param ApiPlatformValidatorInterface $validator
-     * @param MessageBusInterface $defaultBus
      * @param bool $validateCommand
-     * @param bool $ignoreMessengerValidation
      */
     public function __construct(
         private CommandFactory $commandFactory,
         private ApiPlatformValidatorInterface $validator,
-        private MessageBusInterface $defaultBus,
-        private bool $validateCommand,
-        private bool $ignoreMessengerValidation
+        private bool $validateCommand
     ) {
-        $this->messageBus = $this->defaultBus;
     }
 
     /**
-     * Creates the command object from the Request.
+     * Creates the command object from the Request and returns it to the write-listener (persistence is done there).
      * Explicit validation is performed via ApiPlatformValidatorInterface if configured.
      * Exceptions from implicit validation via ValidationMiddleware are wrapped with Api Platform validation exceptions.
      * Any bundle-specific exceptions will be wrapped with an exception expected by Api Platform.
@@ -66,16 +55,7 @@ final class Controller
             $this->validator->validate($command);
         }
 
-        // The exception thrown by the ValidationMiddleware will be wrapped with the ApiPlatformValidationException,
-        // which is expected by Api Platform.
-        try {
-            return $this->handle(Envelope::wrap($command, [$data->apiPlatformContext->toContextStamp()]));
-        } catch (ValidationFailedException $exception) {
-            if (false === $this->ignoreMessengerValidation) {
-                throw new ApiPlatformValidationException($exception->getViolations(), previous: $exception);
-            }
-
-            throw $exception;
-        }
+        // The command is handled by the default API Platform request flow. If 'write' is enabled, DataPersisters are called.
+        return $command;
     }
 }

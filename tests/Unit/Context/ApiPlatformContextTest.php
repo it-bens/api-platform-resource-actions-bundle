@@ -46,15 +46,6 @@ final class ApiPlatformContextTest extends TestCase
 
     /**
      * @return Generator
-     * @throws RuntimeExceptionInterface
-     */
-    public function provideForToContextStamp(): Generator
-    {
-        yield [new ApiPlatformContext($this->buildRequestContext())];
-    }
-
-    /**
-     * @return Generator
      */
     public function provideForValid(): Generator
     {
@@ -73,22 +64,6 @@ final class ApiPlatformContextTest extends TestCase
     {
         $this->expectException($expectedException);
         new ApiPlatformContext($context);
-    }
-
-    /**
-     * @dataProvider provideForToContextStamp
-     *
-     * @param ApiPlatformContext $context
-     * @return void
-     */
-    public function testToContextStamp(ApiPlatformContext $context): void
-    {
-        $stamp = $context->toContextStamp();
-        $this->assertInstanceOf(ContextStamp::class, $stamp);
-
-        $rawContext = $stamp->getContext();
-        $this->assertEquals($context->getResourceClass(), $rawContext['resource_class']);
-        $this->assertEquals($context->getResourceObject(), $rawContext[AbstractNormalizer::OBJECT_TO_POPULATE]);
     }
 
     /**

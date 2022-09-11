@@ -46,7 +46,6 @@ final class RequestTransformer implements DataTransformerInterface
     public function transform($object, string $to, array $context = []): object
     {
         $apiPlatformContext = new ApiPlatformContext($context);
-        // The context will be used to generate a ContextStamp for the message bus.
         $object->apiPlatformContext = $apiPlatformContext;
         $object->resource = $apiPlatformContext->getResourceClass();
 

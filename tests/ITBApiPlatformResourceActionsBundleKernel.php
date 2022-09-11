@@ -10,11 +10,9 @@ use ITB\ApiPlatformResourceActionsBundle\ITBApiPlatformResourceActionsBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Yaml\Yaml;
-use Tests\ITB\ApiPlatformResourceActionsBundle\Mock\Messenger\DoNothingHandler;
 
 final class ITBApiPlatformResourceActionsBundleKernel extends Kernel
 {
@@ -79,15 +77,6 @@ final class ITBApiPlatformResourceActionsBundleKernel extends Kernel
 
             // Tested services are made public to use them via container.
             $container->addCompilerPass(new PublicForTestsCompilerPass());
-
-            $doNothingMessageHandler = new Definition(DoNothingHandler::class);
-            $doNothingMessageHandler->addTag('messenger.message_handler');
-
-            $container->addDefinitions(
-                [
-                    DoNothingHandler::class => $doNothingMessageHandler
-                ]
-            );
         });
     }
 }
