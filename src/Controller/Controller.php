@@ -6,7 +6,7 @@ namespace ITB\ApiPlatformResourceActionsBundle\Controller;
 
 use ApiPlatform\Core\Bridge\Symfony\Validator\Exception\ValidationException as ApiPlatformValidationException;
 use ApiPlatform\Core\Validator\ValidatorInterface as ApiPlatformValidatorInterface;
-use ITB\ApiPlatformResourceActionsBundle\Command\CommandFactory;
+use ITB\ApiPlatformResourceActionsBundle\Command\CommandFactoryInterface;
 use ITB\ApiPlatformResourceActionsBundle\Controller\ControllerException\RequestApiPlatformContextIsNullException;
 use ITB\ApiPlatformResourceActionsBundle\Exception\RuntimeExceptionInterface;
 use ITB\ApiPlatformResourceActionsBundle\Request\Request;
@@ -15,12 +15,12 @@ use Throwable;
 final class Controller
 {
     /**
-     * @param CommandFactory $commandFactory
+     * @param CommandFactoryInterface $commandFactory
      * @param ApiPlatformValidatorInterface $validator
      * @param bool $validateCommand
      */
     public function __construct(
-        private CommandFactory $commandFactory,
+        private CommandFactoryInterface $commandFactory,
         private ApiPlatformValidatorInterface $validator,
         private bool $validateCommand
     ) {

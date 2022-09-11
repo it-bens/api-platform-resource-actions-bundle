@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ITB\ApiPlatformResourceActionsBundle\Validation;
 
 use ITB\ApiPlatformResourceActionsBundle\Action\ResourceActionCollectionException\ActionForResourceNotFound;
-use ITB\ApiPlatformResourceActionsBundle\Command\CommandFactory;
+use ITB\ApiPlatformResourceActionsBundle\Command\CommandFactoryInterface;
 use ITB\ApiPlatformResourceActionsBundle\Exception\RuntimeExceptionInterface;
 use ITB\ApiPlatformResourceActionsBundle\Request\Request;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
@@ -17,9 +17,9 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
 final class ActionRequestValidator extends ConstraintValidator
 {
     /**
-     * @param CommandFactory $commandFactory
+     * @param CommandFactoryInterface $commandFactory
      */
-    public function __construct(private CommandFactory $commandFactory)
+    public function __construct(private CommandFactoryInterface $commandFactory)
     {
     }
 
