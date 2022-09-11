@@ -6,6 +6,7 @@ namespace Tests\ITB\ApiPlatformResourceActionsBundle\Unit\Action;
 
 use Generator;
 use ITB\ApiPlatformResourceActionsBundle\Action\ResourceActionCommandMetadata;
+use ITB\ApiPlatformResourceActionsBundle\Action\ResourceActionException\CommandConstructorParameterRetrievalFailedException;
 use ITB\ApiPlatformResourceActionsBundle\Action\ResourceActionException\CommandNotAClassException;
 use ITB\ApiPlatformResourceActionsBundle\Exception\CompileTimeExceptionInterface;
 use ITB\ApiPlatformResourceActionsBundle\Exception\RuntimeExceptionInterface;
@@ -13,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionParameter;
 use Tests\ITB\ApiPlatformResourceActionsBundle\Mock\Command\CommandWithNoConstructor;
 use Tests\ITB\ApiPlatformResourceActionsBundle\Mock\Command\DoNothingWithTheDocument;
+use Tests\ITB\ApiPlatformResourceActionsBundle\Mock\Command\DoNothingWithTheDocumentAndAnother;
 use Tests\ITB\ApiPlatformResourceActionsBundle\Mock\Entity\Document;
 
 final class ResourceActionCommandMetadataTest extends TestCase
@@ -23,6 +25,14 @@ final class ResourceActionCommandMetadataTest extends TestCase
     public function provideForGetConstructorParameterNameForType(): Generator
     {
         yield [new ResourceActionCommandMetadata(DoNothingWithTheDocument::class)];
+    }
+
+    /**
+     * @return Generator
+     */
+    public function provideForGetConstructorParameterNameForTypeInvalidTwoConstructorArgumentsOfType(): Generator
+    {
+        yield [new ResourceActionCommandMetadata(DoNothingWithTheDocumentAndAnother::class)];
     }
 
     /**
@@ -58,6 +68,20 @@ final class ResourceActionCommandMetadataTest extends TestCase
      */
     public function testGetConstructorParameterNameForType(ResourceActionCommandMetadata $metadata): void
     {
+        $parameter = $metadata->getConstructorParameterNameForType(Document::class, []);
+        $this->assertEquals('document', $parameter);
+    }
+
+    /**
+     * @dataProvider provideForGetConstructorParameterNameForTypeInvalidTwoConstructorArgumentsOfType
+     *
+     * @param ResourceActionCommandMetadata $metadata
+     * @return void
+     * @throws RuntimeExceptionInterface
+     */
+    public function testGetConstructorParameterNameForTypeInvalidTwoConstructorArgumentsOfType(ResourceActionCommandMetadata $metadata): void
+    {
+        $this->expectException(CommandConstructorParameterRetrievalFailedException::class);
         $parameter = $metadata->getConstructorParameterNameForType(Document::class, []);
         $this->assertEquals('document', $parameter);
     }

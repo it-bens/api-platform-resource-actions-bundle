@@ -11,7 +11,7 @@ use ITB\ApiPlatformResourceActionsBundle\Request\Request;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-final class CommandFactory
+final class CommandFactory implements CommandFactoryInterface
 {
     /**
      * @param ResourceActionCollection $actionCollection
@@ -24,13 +24,11 @@ final class CommandFactory
     }
 
     /**
-     * Creates the command object from the request object with 'resource', 'action' and 'payload'.
-     * The denormalizer exceptions are not caught to pass the proper handling to API Platform.
-     *
      * @param Request $request
      * @return object
+     * @throws ExceptionInterface
+     * @throws RequestResourceIsNullException
      * @throws RuntimeExceptionInterface
-     * @throws ExceptionInterface (denormalization exception)
      */
     public function createCommand(Request $request): object
     {

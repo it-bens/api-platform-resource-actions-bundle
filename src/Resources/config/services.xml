@@ -17,19 +17,20 @@
             <argument type="service" id="itb_api_platform_resource_actions.resource_action_collection"/>
             <argument type="service" id="serializer"/>
         </service>
+        <service alias="itb_api_platform_resource_actions.command_factory" id="ITB\ApiPlatformResourceActionsBundle\Command\CommandFactoryInterface"/>
         <service id="itb_api_platform_resource_actions.request_transformer" class="ITB\ApiPlatformResourceActionsBundle\Request\RequestTransformer">
             <argument type="service" id="itb_api_platform_resource_actions.resource_action_collection"/>
             <tag>api_platform.data_transformer</tag>
         </service>
         <service id="itb_api_platform_resource_actions.controller" class="ITB\ApiPlatformResourceActionsBundle\Controller\Controller" public="false">
-            <argument type="service" id="itb_api_platform_resource_actions.command_factory"/>
+            <argument type="service" id="ITB\ApiPlatformResourceActionsBundle\Command\CommandFactoryInterface"/>
             <argument type="service" id="api_platform.validator"/>
             <argument/> <!-- filled in via configuration -->
         </service>
         <service alias="itb_api_platform_resource_actions.controller" id="ITB\ApiPlatformResourceActionsBundle\Controller\Controller" public="true"/>
 
         <service id="itb_api_platform_resource_actions.action_request_validator" class="ITB\ApiPlatformResourceActionsBundle\Validation\ActionRequestValidator">
-            <argument type="service" id="itb_api_platform_resource_actions.command_factory"/>
+            <argument type="service" id="ITB\ApiPlatformResourceActionsBundle\Command\CommandFactoryInterface"/>
             <tag>validator.constraint_validator</tag>
         </service>
         <service alias="itb_api_platform_resource_actions.action_request_validator" id="ITB\ApiPlatformResourceActionsBundle\Validation\ActionRequestValidator" public="true"/>

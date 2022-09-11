@@ -7,8 +7,13 @@ namespace Tests\ITB\ApiPlatformResourceActionsBundle\Functional\Validation;
 use Generator;
 use ITB\ApiPlatformResourceActionsBundle\Exception\RuntimeExceptionInterface;
 use ITB\ApiPlatformResourceActionsBundle\Request\Request;
+use ITB\ApiPlatformResourceActionsBundle\Validation\ActionRequest;
+use ITB\ApiPlatformResourceActionsBundle\Validation\ActionRequestValidator;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintViolationInterface;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
+use Symfony\Component\Validator\Exception\UnexpectedValueException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Tests\ITB\ApiPlatformResourceActionsBundle\Functional\BuildAndBootKernelTrait;
 use Tests\ITB\ApiPlatformResourceActionsBundle\Functional\BuildRequestTrait;
@@ -38,6 +43,31 @@ final class ActionRequestValidatorTest extends TestCase
         $request = $this->buildInitializedRequestToDoNothing();
         $request->action = 'this-action-is-not-registered';
         yield [$request, $this->getValidator()];
+    }
+
+    /**
+     * @return Generator
+     * @throws RuntimeExceptionInterface
+     */
+    public function provideForInvalidUnexpectedType(): Generator
+    {
+        $validator = $this->getActionRequestValidator();
+        $request = $this->buildInitializedRequestToDoNothing();
+        $constraint = $this->createMock(Constraint::class);
+
+        yield [$validator, $request, $constraint];
+    }
+
+    /**
+     * @return Generator
+     */
+    public function provideForInvalidUnexpectedValue(): Generator
+    {
+        $validator = $this->getActionRequestValidator();
+        $request = 'Not even an object';
+        $constraint = new ActionRequest();
+
+        yield [$validator, $request, $constraint];
     }
 
     /**
@@ -84,6 +114,36 @@ final class ActionRequestValidatorTest extends TestCase
     }
 
     /**
+     * @dataProvider provideForInvalidUnexpectedType
+     *
+     * @param ActionRequestValidator $requestValidator
+     * @param Request $request
+     * @param Constraint $constraint
+     * @return void
+     * @throws RuntimeExceptionInterface
+     */
+    public function testInvalidUnexpectedType(ActionRequestValidator $requestValidator, Request $request, Constraint $constraint): void
+    {
+        $this->expectException(UnexpectedTypeException::class);
+        $requestValidator->validate($request, $constraint);
+    }
+
+    /**
+     * @dataProvider provideForInvalidUnexpectedValue
+     *
+     * @param ActionRequestValidator $requestValidator
+     * @param Request $request
+     * @param Constraint $constraint
+     * @return void
+     * @throws RuntimeExceptionInterface
+     */
+    public function testInvalidUnexpectedValue(ActionRequestValidator $requestValidator, mixed $request, Constraint $constraint): void
+    {
+        $this->expectException(UnexpectedValueException::class);
+        $requestValidator->validate($request, $constraint);
+    }
+
+    /**
      * @dataProvider provideForValidRequest
      *
      * @param Request $request
@@ -94,6 +154,21 @@ final class ActionRequestValidatorTest extends TestCase
     {
         $constraintViolations = $validator->validate($request);
         $this->assertCount(0, $constraintViolations);
+    }
+
+    /**
+     * @return ActionRequestValidator
+     */
+    private function getActionRequestValidator(): ActionRequestValidator
+    {
+        $kernel = $this->buildKernelAndBoot(
+            'config_with_resources_and_resource_action_directories.yaml',
+            'api_platform_config.yaml'
+        );
+        /** @var ActionRequestValidator $validator */
+        $validator = $kernel->getContainer()->get(ActionRequestValidator::class);
+
+        return $validator;
     }
 
     /**
