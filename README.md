@@ -122,6 +122,15 @@ class TheEntity {
 ```
 > :information_source: The `messenger` option has to be enabled, if the command should be handled there. Custom data persisters could be used as well.
 
+### Listing of configured actions via console
+After configuration, the resource actions can be displayed via Symfony console and filtered by a resource.
+```bash
+php bin/console itb:api-platform-resource-actions:list-actions
+# or with filter by resource
+php bin/console itb:api-platform-resource-actions:list-actions --resource="TheNamespace\TheEntity"
+```
+The console will display a table with the columns "API Platform resource", "action name", "command class" and "description".
+
 ## Action validation
 This bundle can validate the created command manually. API Platform validates the input, but as this stage, the input object is generic.
 That's why the command is validated in the controller. It's disabled by default and can be enabled in the bundle configuration.
