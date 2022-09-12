@@ -45,5 +45,10 @@
         <service id="api_platform.serializer.normalizer.item_already_object" class="ITB\ApiPlatformResourceActionsBundle\ApiPlatform\AlreadyObjectItemNormalizer" decorates="api_platform.serializer.normalizer.item">
             <argument type="service" id="api_platform.serializer.normalizer.item_already_object.inner"/>
         </service>
+
+        <service id="itb_api_platform_resource_actions.list_resource_actions_console_command" class="ITB\ApiPlatformResourceActionsBundle\Console\ListResourceActionsConsoleCommand">
+            <argument type="service" id="itb_api_platform_resource_actions.resource_action_definition_collection"/>
+            <tag name="console.command" command="itb:api-platform-resource-actions:list-actions"/>
+        </service>
     </services>
 </container>

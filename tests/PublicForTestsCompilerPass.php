@@ -17,6 +17,7 @@ final class PublicForTestsCompilerPass implements CompilerPassInterface
         'itb_api_platform_resource_actions.controller',
         'itb_api_platform_resource_actions.open_api_factory',
         'api_platform.metadata.resource.metadata_factory.cached',
+        'itb_api_platform_resource_actions.list_resource_actions_console_command',
         'validator'
     ];
 
