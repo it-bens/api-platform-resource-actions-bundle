@@ -98,12 +98,12 @@ jobs:
       matrix:
         os: [ubuntu-20.04]
         php-version: [8.0]
-        composer-lock: [composer_symfony_54.lock, composer_symfony_60.lock]
+        symfony-version: ["5.4.*", "6.0.*"]
         experimental: [false]
         include:
           - os: ubuntu-20.04
             php-version: 8.1
-            composer-lock: composer_symfony_61.lock
+            symfony-version: "6.1.*"
             experimental: false
 
     steps:
@@ -118,11 +118,13 @@ jobs:
           coverage: none
           tools: composer
 
-      - name: copy composer.lock
-        uses: canastro/copy-file-action@master
+      - name: Specify symfony version
+        uses: jacobtomlinson/gha-find-replace@v2
         with:
-          source: ".github/workflows/composer/${{ matrix.composer-lock }}"
-          target: "composer.lock"
+          include: "composer.json"
+          find: "^5.4|^6.0|^6.1"
+          replace: "${{ matrix.symfony-version }}"
+          regex: false
 
       - name: Get composer cache directory
         id: composercache
@@ -197,6 +199,7 @@ jobs:
       - name: "Upload coverage to Codecov"
         uses: codecov/codecov-action@v2
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           file: coverage.xml
           flags: unittests
           fail_ci_if_error: true
